@@ -65,7 +65,7 @@ fn build_rdkit() {
         .define("RDK_BUILD_CPP_TESTS", "OFF") // TODO should we turn this one on later?
         .define("RDK_OPTIMIZE_POPCNT", "OFF") // just to skip warnings on the M1
     ;
-    // config.
+
     config.very_verbose(true);
 
     println!("Configuring and compiling rdkit");

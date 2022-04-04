@@ -40,3 +40,13 @@ Prior art
  - [rdkafka's excellent librdkafka build.rs](https://github.com/fede1024/rust-rdkafka/blob/master/rdkafka-sys/build.rs)
  - https://iwatobipen.wordpress.com/2022/01/29/use-rdkit-from-rust-rdkit-rdkitcffi-rust/
  - [an attempt at using rdkit in rust but without docs on how to build rdkit](https://github.com/iwatobipen/rust_rdkit/)
+
+Working with git submodules
+---
+
+Initialize the contents of the submodules: `git submodule update --init --recursive`
+
+Update the submodules: `git submodule update --recursive --remote`
+
+Reset the RDKit submodule: `git submodule add --force https://github.com/rdkit/rdkit.git rdkit`
+ 
