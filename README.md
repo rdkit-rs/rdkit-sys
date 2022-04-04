@@ -1,4 +1,4 @@
-RDKIT-Sys
+RDKit-Sys
 ---
 
 Build a cffi-able rdkit! Using the magic of [cargo build scripts](https://doc.rust-lang.org/cargo/reference/build-scripts.html)
@@ -24,12 +24,17 @@ The CFFI flavor of RDKit is still emitted as a dynamically loaded library so our
 on disk. I could not figure out how to create a `.a` variant of the library, which would be suitable for static linking. Until I can create a `.a` just be
 aware it might be a pain to run the RDKit program outside of a carefully constructed `cargo run ...` invocation.
 
+TODO
+---
+
  - [X] build rdkit, with useful flags, from source
  - [X] copy rdkit library files to the "right spot" in the cargo filesystem
  - [ ] provide function C function definitions in a format that Rust can use
  - [ ] rewrap C functions with useful high level Rust flavors
 
-Prior art:
+Prior art
+---
+
  - [rdkafka's excellent librdkafka build.rs](https://github.com/fede1024/rust-rdkafka/blob/master/rdkafka-sys/build.rs)
  - https://iwatobipen.wordpress.com/2022/01/29/use-rdkit-from-rust-rdkit-rdkitcffi-rust/
  - [an attempt at using rdkit in rust but without docs on how to build rdkit](https://github.com/iwatobipen/rust_rdkit/)
