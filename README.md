@@ -31,6 +31,8 @@ TODO
  - [X] copy rdkit library files to the "right spot" in the cargo filesystem
  - [ ] provide function C function definitions in a format that Rust can use
  - [ ] rewrap C functions with useful high level Rust flavors
+ - [ ] figure out how to `cargo publish` without `--no-verify` (otherwise it detects changes outside of OUTDIR)
+ - [ ] the build should copy the .h files to a well known location so we can auto-bindgen against them
 
 Prior art
 ---
