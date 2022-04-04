@@ -6,6 +6,7 @@ edition = "2021"
 license-file = "LICENSE"
 description = "RDKit CFFI library builder and bindings"
 repository = "https://github.com/tureus/rdkit-sys"
+exclude = ["rdkit"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
