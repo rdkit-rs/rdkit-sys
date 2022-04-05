@@ -19,8 +19,7 @@
 //! Basic usage:
 //!
 //!```
-//! use rdkit_sys::molecule::Molecule;use rdkit_sys::molecule::Molecule;
-//! use rdkitcffi::Molecule;
+//! use rdkit_sys::molecule::Molecule;
 //!
 //! let smiles = "OCCC#CO";
 //! let mol = Molecule::new(smiles, "").unwrap();
@@ -30,8 +29,8 @@
 //!
 //! Additional arguments can be passed via json
 //!
-//! ```
-//! use rdkitcffi::Molecule;
+//!```
+//! use rdkit_sys::molecule::Molecule;
 //!
 //! let json_args = "{\"removeHs\":false,\"canonical\":false}";
 //! let mol = Molecule::new("c1cc(O[H])ccc1", json_args).unwrap();
@@ -40,7 +39,7 @@
 //! Working with SD files and filtering invalid molecules (=None):
 //!
 //! ```
-//!use rdkitcffi::{Molecule,read_sdfile};
+//!use rdkit_sys::{Molecule,read_sdfile};
 //!
 //! let mut mol_opt_list : Vec<Option<Molecule>>= read_sdfile("data/test.sdf");
 //! let mut mol_list: Vec<Molecule> = mol_opt_list.into_iter().filter_map(|m| m).collect();
@@ -51,7 +50,7 @@
 //! Dealing with invalid molecules (=None)
 //!
 //! ```
-//! use rdkitcffi::Molecule;
+//! use rdkit_sys::Molecule;
 //!
 //! let result = Molecule::new("OCCO", "");
 //! match result {
@@ -64,7 +63,7 @@
 //! Getting a JSON represenation (via serde_json):
 //!
 //! ```
-//! use rdkitcffi::Molecule;
+//! use rdkit_sys::Molecule;
 //!
 //! let mol = Molecule::new("OCCO", "").unwrap();
 //! println!("json: {:?}", mol.get_json(""));
@@ -74,7 +73,7 @@
 //! Neutralizing a zwitterion
 //!
 //! ```
-//! use rdkitcffi::Molecule;
+//! use rdkit_sys::Molecule;
 //!
 //! let mut mol = Molecule::new("C(C(=O)[O-])[NH3+]", "").unwrap();
 //! mol.neutralize("");
@@ -85,7 +84,7 @@
 //! Computing RDKit descriptors
 //!
 //! ```
-//! use rdkitcffi::Molecule;
+//! use rdkit_sys::Molecule;
 //!
 //! let mol = Molecule::new("CCCN", "").unwrap();
 //! let desc = mol.get_descriptors_as_dict();
@@ -97,11 +96,11 @@
 //! Creating a polars dataframe:
 //!
 //! ```
-//! use rdkitcffi::Molecule;
+//! use rdkit_sys::Molecule;
 //! use polars::prelude::*;
 //! use polars::df;
 //!
-//! let mut mol_list : Vec<Molecule> = rdkitcffi::read_smifile_unwrap("data/test.smi");
+//! let mut mol_list : Vec<Molecule> = rdkit_sys::read_smifile_unwrap("data/test.smi");
 //! let a: Vec<_> = mol_list.iter().map(|m| m.get_smiles("")).collect();
 //! let df = df!( "smiles" => a).unwrap();
 //!
