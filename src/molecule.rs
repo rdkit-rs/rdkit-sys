@@ -7,7 +7,7 @@
 //! Use it at your own risk, its not yet recommended for productive use and only available for linux :-)
 //!
 //! Please note, that only a limited functionality is being exposed via cffi by RDKit. Structured data is
-//! transferred from the backend via the cffi interface as string types. Addiitional arguments can be passed as json strings.  
+//! transferred from the backend via the cffi interface as string types. Additional arguments can be passed as json strings.  
 //! This also means that the structure of objects is different from the C/C++ and python APIs.  
 //!
 //! [github repository](https://github.com/chrissly31415/rdkitcffi).
@@ -121,19 +121,7 @@ pub use crate::bindings;
 
 use libc::free;
 
-use bindings::{add_hs, enable_logging, remove_all_hs, set_3d_coords};
-use bindings::{canonical_tautomer, cleanup, neutralize, normalize, reionize};
-use bindings::{free_ptr, size_t};
-use bindings::{
-    get_cxsmiles, get_descriptors, get_inchi, get_inchikey_for_inchi, get_json, get_mol,
-    get_molblock, get_qmol, get_smarts, get_smiles, get_substruct_match, get_substruct_matches,
-    get_svg, get_v3kmolblock,
-};
-use bindings::{
-    get_morgan_fp, get_morgan_fp_as_bytes, get_pattern_fp, get_pattern_fp_as_bytes, get_rdkit_fp,
-    get_rdkit_fp_as_bytes,
-};
-
+use bindings::{size_t, *};
 /// Basic class, implementing most functionality as member functions of a molecule object
 
 pub struct Molecule {
@@ -162,7 +150,7 @@ impl Molecule {
     pub fn new(input: &str, json_info: &str) -> Option<Molecule> {
         let input_cstr = CString::new(input).unwrap();
         let json_info = CString::new(json_info).unwrap();
-        let pkl_size: *mut size_t = unsafe { libc::malloc(mem::size_of::<u64>()) as *mut u64 };
+        let pkl_size: *mut u64 = unsafe { libc::malloc(mem::size_of::<u64>()) as *mut u64 };
         let pkl_mol = unsafe { get_mol(input_cstr.as_ptr(), pkl_size, json_info.as_ptr()) };
         unsafe {
             if pkl_mol.is_null() || *pkl_size == 0 {
@@ -175,7 +163,7 @@ impl Molecule {
     pub fn get_mol(input: &str, json_info: &str) -> Molecule {
         let input_cstr = CString::new(input).unwrap();
         let json_info = CString::new(json_info).unwrap();
-        let pkl_size: *mut size_t = unsafe { libc::malloc(mem::size_of::<u64>()) as *mut u64 };
+        let pkl_size: *mut u64 = unsafe { libc::malloc(mem::size_of::<u64>()) as *mut u64 };
         let pkl_mol = unsafe { get_mol(input_cstr.as_ptr(), pkl_size, json_info.as_ptr()) };
         if pkl_mol.is_null() {
             panic!("Could not create molecule!");
@@ -480,7 +468,7 @@ impl Molecule {
     pub fn get_morgan_fp_as_bytes(&self, json_info: &str) -> Vec<i8> {
         let json_info = CString::new(json_info).unwrap();
         unsafe {
-            let n_bytes: *mut size_t = libc::malloc(mem::size_of::<u64>()) as *mut size_t;
+            let n_bytes: *mut u64 = libc::malloc(mem::size_of::<u64>()) as *mut u64;
             let fp_cchar: *mut c_char =
                 get_morgan_fp_as_bytes(self.pkl_mol, *self.pkl_size, n_bytes, json_info.as_ptr());
             let mut fp_bytes: Vec<i8> = Vec::new();
@@ -559,7 +547,7 @@ impl Molecule {
     pub fn get_qmol(input: &str, json_info: &str) -> Option<Molecule> {
         let input_cstr = CString::new(input).unwrap();
         let json_info = CString::new(json_info).unwrap();
-        let pkl_size: *mut size_t = unsafe { libc::malloc(mem::size_of::<u64>()) as *mut u64 };
+        let pkl_size: *mut size_t = unsafe { libc::malloc(mem::size_of::<u64>()) as *mut size_t };
         let pkl_mol = unsafe { get_qmol(input_cstr.as_ptr(), pkl_size, json_info.as_ptr()) };
         if pkl_mol.is_null() {
             return None;
@@ -573,7 +561,7 @@ pub fn read_smifile(smi_file: &str) -> Vec<Option<Molecule>> {
     let smi_file = read_to_string(smi_file).expect("Could not load file.");
     let mut mol_list: Vec<Option<Molecule>> = Vec::new();
     let smiles_list: Vec<&str> = smi_file.split("\n").collect();
-    for (i, s) in smiles_list.iter().enumerate() {
+    for (_, s) in smiles_list.iter().enumerate() {
         let s_mod = s.trim();
         if s_mod.len() == 0 {
             mol_list.push(None);
@@ -587,7 +575,7 @@ pub fn read_smifile(smi_file: &str) -> Vec<Option<Molecule>> {
 
 /// read a classical .smi file, filter molecules which are none
 pub fn read_smifile_unwrap(smi_file: &str) -> Vec<Molecule> {
-    let mut mol_opt_list: Vec<Option<Molecule>> = crate::read_smifile(smi_file);
+    let mol_opt_list: Vec<Option<Molecule>> = crate::read_smifile(smi_file);
     let mol_list: Vec<Molecule> = mol_opt_list.into_iter().filter_map(|m| m).collect();
     mol_list
 }
@@ -597,13 +585,13 @@ pub fn read_sdfile(sd_file: &str) -> Vec<Option<Molecule>> {
     let sd_file = read_to_string(sd_file).expect("Could not load file.");
     let mut mol_list: Vec<Option<Molecule>> = Vec::new();
     let molblock_list: Vec<&str> = sd_file.split("$$$$").collect();
-    for (i, s) in molblock_list.iter().enumerate() {
+    for (_, s) in molblock_list.iter().enumerate() {
         let s_mod = s.trim();
         if s_mod.len() == 0 {
             mol_list.push(None);
             continue;
         };
-        let mut mol_opt = Molecule::new(s_mod, "");
+        let mol_opt = Molecule::new(s_mod, "");
 
         // this avoids hard to catch exceptions later on...
         //match mol_opt.as_mut() {
@@ -617,7 +605,7 @@ pub fn read_sdfile(sd_file: &str) -> Vec<Option<Molecule>> {
 
 /// read a classical .sdf file, filter molecules which are none
 pub fn read_sdfile_unwrap(sd_file: &str) -> Vec<Molecule> {
-    let mut mol_opt_list: Vec<Option<Molecule>> = crate::read_sdfile(sd_file);
+    let mol_opt_list: Vec<Option<Molecule>> = crate::read_sdfile(sd_file);
     let mol_list: Vec<Molecule> = mol_opt_list.into_iter().filter_map(|m| m).collect();
     mol_list
 }
@@ -715,7 +703,7 @@ impl JsonMolecule {
         JsonMolecule::JsonMolFromJson(&json_str)
     }
 
-    pub fn JsonMolFromSmiles(smiles: &str, json_info: &str) -> JsonMolecule {
+    pub fn JsonMolFromSmiles(smiles: &str, _json_info: &str) -> JsonMolecule {
         JsonMolecule::JsonMolFromString(smiles, "")
     }
 
@@ -767,7 +755,12 @@ mod tests {
         let mut mol_list: Vec<Option<Molecule>> = read_sdfile("data/test.sdf");
         println!("mols: {}", mol_list.len());
         for (i, mol_opt) in mol_list.iter_mut().enumerate() {
-            let mol = mol_opt.as_mut().unwrap_or(continue);
+            let mol = if let Some(mol) = mol_opt.as_mut() {
+                mol
+            } else {
+                continue;
+            };
+
             mol.remove_all_hs();
             println!(
                 "Pos:{} INCHIKEY: {} SMILES: {} NUMATOMS: {} NUMBONDS: {}",

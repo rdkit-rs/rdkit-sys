@@ -16,7 +16,7 @@ pub fn read_smifile(smi_file: &str) -> Vec<Option<Molecule>> {
     let smi_file = read_to_string(smi_file).expect("Could not load file.");
     let mut mol_list: Vec<Option<Molecule>> = Vec::new();
     let smiles_list: Vec<&str> = smi_file.split("\n").collect();
-    for (i, s) in smiles_list.iter().enumerate() {
+    for s in smiles_list.iter() {
         let s_mod = s.trim();
         if s_mod.len() == 0 {
             mol_list.push(None);
@@ -33,13 +33,13 @@ pub fn read_sdfile(sd_file: &str) -> Vec<Option<Molecule>> {
     let sd_file = read_to_string(sd_file).expect("Could not load file.");
     let mut mol_list: Vec<Option<Molecule>> = Vec::new();
     let molblock_list: Vec<&str> = sd_file.split("$$$$").collect();
-    for (i, s) in molblock_list.iter().enumerate() {
+    for s in molblock_list.iter() {
         let s_mod = s.trim();
         if s_mod.len() == 0 {
             mol_list.push(None);
             continue;
         };
-        let mut mol_opt = Molecule::new(s_mod, "");
+        let mol_opt = Molecule::new(s_mod, "");
 
         // this avoids hard to catch exceptions later on...
         //match mol_opt.as_mut() {
