@@ -6,7 +6,7 @@ edition = "2021"
 license = "MIT"
 description = "RDKit CFFI library builder and bindings"
 repository = "https://github.com/tureus/rdkit-sys"
-exclude = ["rdkit"]
+exclude = ["rdkit-*", "*.tar.gz"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
