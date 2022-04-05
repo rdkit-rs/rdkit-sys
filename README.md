@@ -4,7 +4,8 @@ RDKit-Sys
 Build a cffi-able rdkit! Using the magic of [cargo build scripts](https://doc.rust-lang.org/cargo/reference/build-scripts.html)
 
 Similar in spirit to [rdkitcffi](https://github.com/chrissly31415/rdkitcffi) but you don't want to rely on magic .so files
-committed to a git repo. Use this crate and your computer will build rdkit, with all the right cmake definitions, from scratch.
+committed to a git repo. This repo also supports OS X. Use this crate and cargo will automatically build rdkit, with all the
+right cmake definitions, from scratch.
 
 How does it work?
 ---
@@ -24,15 +25,39 @@ The CFFI flavor of RDKit is still emitted as a dynamically loaded library so our
 on disk. I could not figure out how to create a `.a` variant of the library, which would be suitable for static linking. Until I can create a `.a` just be
 aware it might be a pain to run the RDKit program outside of a carefully constructed `cargo run ...` invocation.
 
+Prerequisites
+---
+
+On Mac:
+
+    brew install boost cmake llvm
+
+boost is a RDKit C++ dependency, cmake is how you create RDKit's Makefile, llvm is used by bind-gen to create the rust
+bindings.rs file with all the dylib definitions required to use RDKit from rust.
+
+Testing
+---
+
+Get the dylib built first, with some concurrent job spawning to go faster:
+
+    NUM_JOBS=10 cargo build -vv
+
+great for exercising the build.rs script.
+
+Or just run the test suite:
+
+    cargo test
+
 TODO
 ---
 
  - [X] build rdkit, with useful flags, from source
  - [X] copy rdkit library files to the "right spot" in the cargo filesystem
- - [ ] provide function C function definitions in a format that Rust can use
- - [ ] rewrap C functions with useful high level Rust flavors
+ - [X] provide function C function definitions in a format that Rust can use
+ - [X] rewrap C functions with useful high level Rust flavors (copied from chrissly31415's repo)
  - [ ] figure out how to `cargo publish` without `--no-verify` (otherwise it detects changes outside of OUTDIR)
- - [ ] the build should copy the .h files to a well known location so we can auto-bindgen against them
+ - [X] specify path to RDKit's cffiwrapper.h and all required search paths for other dependent headers
+ - [ ] use conditional rebuild logic to make the library build experience more reliable (for now, if you get stuck, try `cargo clean` and retry with `cargo build -vv`)
 
 Prior art
 ---

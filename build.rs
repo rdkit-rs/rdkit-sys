@@ -6,10 +6,6 @@ use std::process::Command;
 
 fn main() {
     env_logger::init();
-    // if env::var("CARGO_FEATURE_DYNAMIC_LINKING").is_err() {
-    //     eprintln!("must enable CARGO_FEATURE_DYNAMIC_LINKING");
-    //     std::process::exit(1)
-    // }
 
     // if !Path::new("rdkit/license.txt").exists() {
     eprintln!("Setting up submodules");
@@ -99,6 +95,42 @@ fn build_rdkit() {
         // Tell cargo to invalidate the built crate whenever any of the
         // included header files changed.
         .parse_callbacks(Box::new(bindgen::CargoCallbacks))
+        // All the allows, stolen from chrissly's codebase
+        .allowlist_function("version")
+        .allowlist_function("enable_logging")
+        .allowlist_function("disable_logging")
+        .allowlist_function("get_smiles")
+        .allowlist_function("get_mol")
+        .allowlist_function("get_inchikey_for_inchi")
+        .allowlist_function("get_inchi")
+        .allowlist_function("get_molblock")
+        .allowlist_function("get_v3kmolblock")
+        .allowlist_function("get_json")
+        .allowlist_function("canonical_tautomer")
+        .allowlist_function("get_descriptors")
+        .allowlist_function("add_hs")
+        .allowlist_function("set_3d_coords")
+        .allowlist_function("set_2d_coords")
+        .allowlist_function("get_svg")
+        .allowlist_function("remove_all_hs")
+        .allowlist_function("get_substruct_matches")
+        .allowlist_function("get_substruct_match")
+        .allowlist_function("get_cxsmiles")
+        .allowlist_function("get_smarts")
+        .allowlist_function("get_qmol")
+        .allowlist_function("cleanup")
+        .allowlist_function("neutralize")
+        .allowlist_function("reionize")
+        .allowlist_function("normalize")
+        .allowlist_function("get_morgan_fp")
+        .allowlist_function("get_morgan_fp_as_bytes")
+        .allowlist_function("get_rdkit_fp")
+        .allowlist_function("get_rdkit_fp_as_bytes")
+        .allowlist_function("get_pattern_fp")
+        .allowlist_function("get_pattern_fp_as_bytes")
+        .allowlist_function("free")
+        .allowlist_function("free_ptr")
+        .allowlist_var("size_t")
         // Finish the builder and generate the bindings.
         .generate()
         // Unwrap the Result and panic on failure.
