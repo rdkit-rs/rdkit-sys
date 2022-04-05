@@ -1,5 +1,0 @@
-[submodule "rdkit"]
-	path = rdkit
-	url = https://github.com/rdkit/rdkit.git
-[submodule "rdkit/"]
-	branch = Release_2022_03
