@@ -1,10 +1,11 @@
 use std::borrow::Borrow;
-// use std::env;
+use std::env;
 use std::ffi::OsStr;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
 fn main() {
+    env_logger::init();
     // if env::var("CARGO_FEATURE_DYNAMIC_LINKING").is_err() {
     //     eprintln!("must enable CARGO_FEATURE_DYNAMIC_LINKING");
     //     std::process::exit(1)
@@ -71,6 +72,41 @@ fn build_rdkit() {
     println!("Configuring and compiling rdkit");
     let dst = config.build();
 
+    eprintln!("{}", dst.display());
+
     println!("cargo:rustc-link-search=native={}/lib", dst.display());
     println!("cargo:rustc-link-lib=dylib=rdkitcffi");
+
+    let crate_root = env::var("CARGO_MANIFEST_DIR").unwrap();
+    let cffiwrapper_h_path = format!("{}/rdkit/Code/MinimalLib/cffiwrapper.h", crate_root);
+    let rdkit_search_path = dst.join("include/rdkit");
+    let clang_rdkit_search = format!("-F{}", rdkit_search_path.display());
+
+    let brew_include_path = "/opt/homebrew/include";
+    let brew_search = format!("-F{}", brew_include_path);
+    // eprintln!("{}", rdkit_path);
+
+    // The bindgen::Builder is the main entry point
+    // to bindgen, and lets you build up options for
+    // the resulting bindings.
+    let bindings = bindgen::Builder::default()
+        // Search in output path from cmake
+        .clang_arg(&clang_rdkit_search)
+        .clang_arg(&brew_search)
+        // The input header we would like to generate
+        // bindings for.
+        .header(&cffiwrapper_h_path)
+        // Tell cargo to invalidate the built crate whenever any of the
+        // included header files changed.
+        .parse_callbacks(Box::new(bindgen::CargoCallbacks))
+        // Finish the builder and generate the bindings.
+        .generate()
+        // Unwrap the Result and panic on failure.
+        .expect("Unable to generate bindings");
+
+    // Write the bindings to the $OUT_DIR/bindings.rs file.
+    let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
+    bindings
+        .write_to_file(out_path.join("bindings.rs"))
+        .expect("Couldn't write bindings!");
 }

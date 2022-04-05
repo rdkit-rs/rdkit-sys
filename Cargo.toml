@@ -3,7 +3,6 @@ name = "rdkit-sys"
 authors = ["Xavier Lange (xrlange@gmail.com)"]
 version = "0.1.2"
 edition = "2021"
-license-file = "LICENSE"
 license = "MIT"
 description = "RDKit CFFI library builder and bindings"
 repository = "https://github.com/tureus/rdkit-sys"
@@ -15,3 +14,4 @@ exclude = ["rdkit"]
 pkg-config = "0.3.9"
 cmake = { version = "0.1.0" }
 bindgen = "^0.59.2"
+env_logger = "0"
