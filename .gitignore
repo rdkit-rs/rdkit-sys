@@ -2,3 +2,5 @@
 Cargo.lock
 .idea/
 rdkit-sys.iml
+*.tar.gz
+rdkit-*/

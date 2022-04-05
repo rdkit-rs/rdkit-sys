@@ -1,19 +1,85 @@
 use std::borrow::Borrow;
 use std::env;
 use std::ffi::OsStr;
+use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
 use std::process::Command;
+
+const VERSION: &'static str = "2022_03_1";
 
 fn main() {
     env_logger::init();
 
-    // if !Path::new("rdkit/license.txt").exists() {
-    eprintln!("Setting up submodules");
-    run_command_or_fail(".", "git", &["submodule", "update", "--init"]);
-    run_command_or_fail(".", "mkdir", &["-p", "rdkit/build"]);
+    eprintln!("Downloading RDKit Release {}", VERSION);
+    let path = download_rdkit_release(VERSION).unwrap();
+
+    let expected_source_folder = path
+        .parent()
+        .unwrap()
+        .join(format!("rdkit-Release_{}/", VERSION));
+
+    if let Ok(metadata) = std::fs::metadata(&expected_source_folder) {
+        if metadata.is_dir() {
+            eprintln!(
+                "folder {} already exists",
+                expected_source_folder.to_str().unwrap()
+            );
+        }
+    } else {
+        run_command_or_fail(
+            path.parent().unwrap().to_str().unwrap(),
+            "tar",
+            &["xzf", &path.file_name().unwrap().to_str().unwrap()],
+        );
+    }
+
     eprintln!("Building and linking rdkit statically");
-    build_rdkit();
-    // }
+    build_rdkit(VERSION);
+}
+
+fn download_rdkit_release(version: &str) -> eyre::Result<PathBuf> {
+    let url = format!(
+        "https://github.com/rdkit/rdkit/archive/refs/tags/Release_{}.tar.gz",
+        version
+    );
+
+    let crate_root = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
+    let output_path = crate_root.join(format!("{}.tar.gz", version));
+
+    if let Ok(metadata) = std::fs::metadata(&output_path) {
+        if metadata.len() > 0 {
+            eprintln!(
+                "file {} already exists and has data, skipping the download",
+                output_path.display()
+            );
+            return Ok(output_path);
+        }
+    }
+
+    let mut local_file = std::fs::File::create(output_path.clone())?;
+
+    let mut response = reqwest::blocking::get(url)?;
+
+    if !response.status().is_success() {
+        eprintln!(
+            "could not download {:?}: {:?}",
+            response.status(),
+            response.text()
+        );
+        std::process::exit(1);
+    }
+
+    let mut buf = vec![0; 1024 * 32];
+    let mut _total_bytes_read = 0;
+    while let Ok(bytes_read) = response.read(&mut buf) {
+        if bytes_read == 0 {
+            break;
+        }
+        _total_bytes_read += bytes_read;
+        local_file.write(&buf[0..bytes_read])?;
+    }
+
+    Ok(output_path)
 }
 
 fn run_command_or_fail<P, S>(dir: &str, cmd: P, args: &[S])
@@ -49,8 +115,11 @@ where
     }
 }
 
-fn build_rdkit() {
-    let mut config = cmake::Config::new("rdkit");
+fn build_rdkit(version: &str) {
+    let crate_root = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
+    let source_code_path = crate_root.join(format!("rdkit-Release_{}", version));
+
+    let mut config = cmake::Config::new(source_code_path.clone());
 
     config
         .define("RDK_BUILD_CFFI_LIB", "ON")
@@ -61,7 +130,7 @@ fn build_rdkit() {
         .define("RDK_BUILD_SWIG_JAVA_WRAPPER", "OFF")
         .define("RDK_BUILD_CPP_TESTS", "OFF") // TODO should we turn this one on later?
         .define("RDK_OPTIMIZE_POPCNT", "OFF") // just to skip warnings on the M1
-    ;
+        .env("NUM_JOBS", "4");
 
     config.very_verbose(true);
 
@@ -73,25 +142,20 @@ fn build_rdkit() {
     println!("cargo:rustc-link-search=native={}/lib", dst.display());
     println!("cargo:rustc-link-lib=dylib=rdkitcffi");
 
-    let crate_root = env::var("CARGO_MANIFEST_DIR").unwrap();
-    let cffiwrapper_h_path = format!("{}/rdkit/Code/MinimalLib/cffiwrapper.h", crate_root);
+    let cffiwrapper_h_path = source_code_path.join("Code/MinimalLib/cffiwrapper.h");
     let rdkit_search_path = dst.join("include/rdkit");
     let clang_rdkit_search = format!("-F{}", rdkit_search_path.display());
 
     let brew_include_path = "/opt/homebrew/include";
     let brew_search = format!("-F{}", brew_include_path);
-    // eprintln!("{}", rdkit_path);
 
-    // The bindgen::Builder is the main entry point
-    // to bindgen, and lets you build up options for
-    // the resulting bindings.
     let bindings = bindgen::Builder::default()
         // Search in output path from cmake
         .clang_arg(&clang_rdkit_search)
         .clang_arg(&brew_search)
         // The input header we would like to generate
         // bindings for.
-        .header(&cffiwrapper_h_path)
+        .header(cffiwrapper_h_path.to_str().unwrap())
         // Tell cargo to invalidate the built crate whenever any of the
         // included header files changed.
         .parse_callbacks(Box::new(bindgen::CargoCallbacks))
