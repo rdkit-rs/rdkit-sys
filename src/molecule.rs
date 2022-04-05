@@ -867,7 +867,7 @@ mod tests {
         let orig_smiles = "OCO";
         let pkl_mol = Molecule::new(orig_smiles, "").unwrap();
         println!("json:    {}", pkl_mol.get_json(""));
-        assert_eq!(pkl_mol.get_json(""),"{\"commonchem\":{\"version\":10},\"defaults\":{\"atom\":{\"z\":6,\"impHs\":0,\"chg\":0,\"nRad\":0,\"isotope\":0,\"stereo\":\"unspecified\"},\"bond\":{\"bo\":1,\"stereo\":\"unspecified\"}},\"molecules\":[{\"atoms\":[{\"z\":8,\"impHs\":1},{\"impHs\":2},{\"z\":8,\"impHs\":1}],\"bonds\":[{\"atoms\":[0,1]},{\"atoms\":[1,2]}],\"extensions\":[{\"name\":\"rdkitRepresentation\",\"formatVersion\":2,\"toolkitVersion\":\"2021.09.11\"}]}]}");
+        assert_eq!(pkl_mol.get_json(""),"{\"commonchem\":{\"version\":10},\"defaults\":{\"atom\":{\"z\":6,\"impHs\":0,\"chg\":0,\"nRad\":0,\"isotope\":0,\"stereo\":\"unspecified\"},\"bond\":{\"bo\":1,\"stereo\":\"unspecified\"}},\"molecules\":[{\"atoms\":[{\"z\":8,\"impHs\":1},{\"impHs\":2},{\"z\":8,\"impHs\":1}],\"bonds\":[{\"atoms\":[0,1]},{\"atoms\":[1,2]}],\"extensions\":[{\"name\":\"rdkitRepresentation\",\"formatVersion\":2,\"toolkitVersion\":\"2022.03.1\"}]}]}");
     }
     #[test]
     fn get_json_molecule() {
@@ -890,13 +890,13 @@ mod tests {
         let json_str = JSONFromString("CCCI", "");
         println!("JSON:{}", json_str);
         //let json_mol = json_mol_str.;
-        assert_eq!(json_str,"{\"commonchem\":{\"version\":10},\"defaults\":{\"atom\":{\"z\":6,\"impHs\":0,\"chg\":0,\"nRad\":0,\"isotope\":0,\"stereo\":\"unspecified\"},\"bond\":{\"bo\":1,\"stereo\":\"unspecified\"}},\"molecules\":[{\"atoms\":[{\"impHs\":3},{\"impHs\":2},{\"impHs\":2},{\"z\":53}],\"bonds\":[{\"atoms\":[0,1]},{\"atoms\":[1,2]},{\"atoms\":[2,3]}],\"extensions\":[{\"name\":\"rdkitRepresentation\",\"formatVersion\":2,\"toolkitVersion\":\"2021.09.11\"}]}]}");
+        assert_eq!(json_str,"{\"commonchem\":{\"version\":10},\"defaults\":{\"atom\":{\"z\":6,\"impHs\":0,\"chg\":0,\"nRad\":0,\"isotope\":0,\"stereo\":\"unspecified\"},\"bond\":{\"bo\":1,\"stereo\":\"unspecified\"}},\"molecules\":[{\"atoms\":[{\"impHs\":3},{\"impHs\":2},{\"impHs\":2},{\"z\":53}],\"bonds\":[{\"atoms\":[0,1]},{\"atoms\":[1,2]},{\"atoms\":[2,3]}],\"extensions\":[{\"name\":\"rdkitRepresentation\",\"formatVersion\":2,\"toolkitVersion\":\"2022.03.1\"}]}]}");
     }
     #[test]
     fn json_str_from_sdf() {
         let json_str = JSONFromString("\n     RDKit          2D\n\n  7  6  0  0  0  0  0  0  0  0999 V2000\n    0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.2990    0.7500    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    2.5981   -0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.8971    0.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.1962   -0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.4952    0.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.7942    1.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0\n  2  3  1  0\n  3  4  1  0\n  4  5  2  3\n  5  6  1  0\n  6  7  3  0\nM  END\n", "");
         println!("JSON:{}", json_str);
-        assert_eq!(json_str,"{\"commonchem\":{\"version\":10},\"defaults\":{\"atom\":{\"z\":6,\"impHs\":0,\"chg\":0,\"nRad\":0,\"isotope\":0,\"stereo\":\"unspecified\"},\"bond\":{\"bo\":1,\"stereo\":\"unspecified\"}},\"molecules\":[{\"name\":\"\",\"atoms\":[{\"impHs\":3},{\"z\":8},{\"impHs\":2},{\"impHs\":1},{\"impHs\":1},{},{\"impHs\":1}],\"bonds\":[{\"atoms\":[0,1]},{\"atoms\":[1,2]},{\"atoms\":[2,3]},{\"bo\":2,\"atoms\":[3,4],\"stereo\":\"either\"},{\"atoms\":[4,5]},{\"bo\":3,\"atoms\":[5,6]}],\"conformers\":[{\"dim\":2,\"coords\":[[0.0,0.0],[1.299,0.75],[2.5981,-0.0],[3.8971,0.75],[5.1962,-0.0],[6.4952,0.75],[7.7942,1.5]]}],\"extensions\":[{\"name\":\"rdkitRepresentation\",\"formatVersion\":2,\"toolkitVersion\":\"2021.09.11\"}]}]}");
+        assert_eq!(json_str,"{\"commonchem\":{\"version\":10},\"defaults\":{\"atom\":{\"z\":6,\"impHs\":0,\"chg\":0,\"nRad\":0,\"isotope\":0,\"stereo\":\"unspecified\"},\"bond\":{\"bo\":1,\"stereo\":\"unspecified\"}},\"molecules\":[{\"name\":\"\",\"atoms\":[{\"impHs\":3},{\"z\":8},{\"impHs\":2},{\"impHs\":1},{\"impHs\":1},{},{\"impHs\":1}],\"bonds\":[{\"atoms\":[0,1]},{\"atoms\":[1,2]},{\"atoms\":[2,3]},{\"bo\":2,\"atoms\":[3,4],\"stereo\":\"either\"},{\"atoms\":[4,5]},{\"bo\":3,\"atoms\":[5,6]}],\"conformers\":[{\"dim\":2,\"coords\":[[0.0,0.0],[1.299,0.75],[2.5981,-0.0],[3.8971,0.75],[5.1962,-0.0],[6.4952,0.75],[7.7942,1.5]]}],\"extensions\":[{\"name\":\"rdkitRepresentation\",\"formatVersion\":2,\"toolkitVersion\":\"2022.03.1\"}]}]}");
     }
     #[test]
     fn neutralize_ion() {
