@@ -51,12 +51,16 @@ pub fn read_sdfile_gz(sd_file_gz_path: &str) -> Vec<Option<Molecule>> {
 }
 
 pub struct MolBlockIter<R: BufRead> {
-    buf: R,
+    buf_read: R,
+    buf: Vec<u8>,
 }
 
 impl<R: BufRead> MolBlockIter<R> {
-    pub fn new(buf: R) -> Self {
-        MolBlockIter { buf }
+    pub fn new(buf_read: R) -> Self {
+        MolBlockIter {
+            buf_read,
+            buf: Vec::with_capacity(1024),
+        }
     }
 }
 
@@ -80,21 +84,19 @@ impl<R: BufRead> Iterator for MolBlockIter<R> {
     type Item = String;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let mut buf = Vec::with_capacity(104);
-
-        let buf = loop {
-            buf.clear();
-            let read = self.buf.read_until(b'$', &mut buf).unwrap();
+        loop {
+            self.buf.clear();
+            let read = self.buf_read.read_until(b'$', &mut self.buf).unwrap();
             if read == 0 {
                 return None;
             } else if read == 1 {
                 continue;
             } else {
-                break buf;
+                break;
             }
-        };
+        }
 
-        let block = std::str::from_utf8(&buf).unwrap();
+        let block = std::str::from_utf8(&self.buf).unwrap();
         let block = block.trim();
 
         return Some(block.to_owned());
