@@ -80,8 +80,10 @@ impl<R: BufRead> Iterator for MolBlockIter<R> {
     type Item = String;
 
     fn next(&mut self) -> Option<Self::Item> {
+        let mut buf = Vec::with_capacity(104);
+
         let buf = loop {
-            let mut buf = vec![];
+            buf.clear();
             let read = self.buf.read_until(b'$', &mut buf).unwrap();
             if read == 0 {
                 return None;
