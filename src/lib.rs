@@ -97,13 +97,6 @@ impl<R: BufRead> Iterator for MolBlockIter<R> {
         let block = std::str::from_utf8(&buf).unwrap();
         let block = block.trim();
 
-        // let molecule = Molecule::new(block, "");
-        //
-        // if molecule.is_none() {
-        //     panic!("could not parse: {}", block);
-        // }
-        // let molecule = molecule.unwrap();
-
         return Some(block.to_owned());
     }
 }

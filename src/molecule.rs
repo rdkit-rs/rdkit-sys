@@ -554,6 +554,20 @@ impl Molecule {
         }
         return Some(Molecule { pkl_size, pkl_mol });
     }
+
+    /// Gets a parent fragment
+    pub fn fragment_parent(&mut self, json_info: &str) -> i16 {
+        let json_info = CString::new(json_info).unwrap();
+        let result = unsafe {
+            fragment_parent(
+                &mut self.pkl_mol as *mut _,
+                self.pkl_size,
+                json_info.as_ptr(),
+            )
+        };
+
+        result
+    }
 }
 
 /// read a classical .smi file
@@ -973,5 +987,13 @@ mod tests {
         let pkl_mol = Molecule::new("c1cc(O[H])ccc1", json_args).unwrap();
         println!("{:?}", pkl_mol);
         assert_eq!(pkl_mol.get_smiles(""), "[H]Oc1ccccc1");
+    }
+
+    #[test]
+    fn test_fragment_parent() {
+        let orig_smiles = "CC";
+        let mut pkl_mol = Molecule::new(orig_smiles, "").unwrap();
+        let result = pkl_mol.fragment_parent("");
+        panic!("{} => {:?}", result, pkl_mol);
     }
 }
