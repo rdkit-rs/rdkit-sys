@@ -148,6 +148,7 @@ impl std::fmt::Debug for Molecule {
 impl Molecule {
     /// Constructor returning an optional molecule
     pub fn new(input: &str, json_info: &str) -> Option<Molecule> {
+        unsafe { enable_logging() };
         let input_cstr = CString::new(input).unwrap();
         let json_info = CString::new(json_info).unwrap();
         let pkl_size: *mut u64 = unsafe { libc::malloc(mem::size_of::<u64>()) as *mut u64 };
