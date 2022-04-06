@@ -752,7 +752,8 @@ mod tests {
     }
     #[test]
     fn sdfile2molecules() {
-        let mut mol_list: Vec<Option<Molecule>> = read_sdfile("data/test.sdf");
+        let mut mol_list: Vec<Option<Molecule>> =
+            crate::read_sdfile("data/Compound_000000001_000500000.sdf");
         println!("mols: {}", mol_list.len());
         for (i, mol_opt) in mol_list.iter_mut().enumerate() {
             let mol = if let Some(mol) = mol_opt.as_mut() {

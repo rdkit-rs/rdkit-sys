@@ -5,6 +5,7 @@
 
 use crate::molecule::Molecule;
 use std::fs::read_to_string;
+use std::io::BufRead;
 
 pub mod bindings;
 pub mod molecule;
@@ -30,23 +31,20 @@ pub fn read_smifile(smi_file: &str) -> Vec<Option<Molecule>> {
 
 /// read a classical .sdf file
 pub fn read_sdfile(sd_file: &str) -> Vec<Option<Molecule>> {
-    let sd_file = read_to_string(sd_file).expect("Could not load file.");
-    let mut mol_list: Vec<Option<Molecule>> = Vec::new();
-    let molblock_list: Vec<&str> = sd_file.split("$$$$").collect();
-    for s in molblock_list.iter() {
-        let s_mod = s.trim();
-        if s_mod.len() == 0 {
-            mol_list.push(None);
-            continue;
-        };
-        let mol_opt = Molecule::new(s_mod, "");
+    // let sd_file = read_to_string(sd_file).expect("Could not load file.");
 
-        // this avoids hard to catch exceptions later on...
-        //match mol_opt.as_mut() {
-        //    Some(mut mol_opt) => {mol_opt.cleanup(""); Some(mol_opt)},
-        //    None => None,
-        //};
-        mol_list.push(mol_opt);
+    let sd_file = std::fs::File::open(sd_file).expect("Could not load file");
+    let mut sd_file = std::io::BufReader::new(sd_file);
+
+    let mut molblocks = Vec::new();
+    let mut molblock_buf = Vec::new();
+    while let Ok(_) = sd_file.read_until(b'$', &mut molblock_buf) {
+        sd_file.consume(3);
+
+        let molblock = std::str::from_utf8(&molblock_buf).unwrap();
+        let mol = Molecule::new(&molblock, "");
+        molblocks.push(mol);
     }
-    mol_list
+
+    molblocks
 }
