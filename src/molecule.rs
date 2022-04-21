@@ -4,11 +4,14 @@
 //!
 //! It makes use of its new (and also still experimental) C Foreign Function Interface (CFFI), see also this [blog post](https://greglandrum.github.io/rdkit-blog/technical/2021/05/01/rdkit-cffi-part1.html).
 //!
-//! Use it at your own risk, its not yet recommended for productive use and only available for linux :-)
+//! Use it at your own risk, its not yet recommended for productive use and only
+//! available for linux :-)
 //!
-//! Please note, that only a limited functionality is being exposed via cffi by RDKit. Structured data is
-//! transferred from the backend via the cffi interface as string types. Additional arguments can be passed as json strings.  
-//! This also means that the structure of objects is different from the C/C++ and python APIs.  
+//! Please note, that only a limited functionality is being exposed via cffi by
+//! RDKit. Structured data is transferred from the backend via the cffi
+//! interface as string types. Additional arguments can be passed as json
+//! strings. This also means that the structure of objects is different from the
+//! C/C++ and python APIs.
 //!
 //! [github repository](https://github.com/chrissly31415/rdkitcffi).
 //!
@@ -39,12 +42,11 @@
 //! Working with SD files and filtering invalid molecules (=None):
 //!
 //! ```
-//!use rdkit_sys::{Molecule,read_sdfile};
+//! use rdkit_sys::{Molecule,read_sdfile};
 //!
 //! let mut mol_opt_list : Vec<Option<Molecule>>= read_sdfile("data/test.sdf");
 //! let mut mol_list: Vec<Molecule> = mol_opt_list.into_iter().filter_map(|m| m).collect();
 //! mol_list.iter_mut().for_each(|m| m.remove_all_hs());
-//!
 //! ```
 //!
 //! Dealing with invalid molecules (=None)
@@ -56,7 +58,7 @@
 //! match result {
 //!    Some(m) => println!("Result: {:?}", m),
 //!    None => println!("Could not get molecule!"),
-//!};
+//! };
 //! ```
 //!
 //!
@@ -67,7 +69,6 @@
 //!
 //! let mol = Molecule::new("OCCO", "").unwrap();
 //! println!("json: {:?}", mol.get_json(""));
-//!
 //! ```
 //!
 //! Neutralizing a zwitterion
@@ -78,7 +79,6 @@
 //! let mut mol = Molecule::new("C(C(=O)[O-])[NH3+]", "").unwrap();
 //! mol.neutralize("");
 //! println!("{:?}", mol.get_smiles(""));
-//!
 //! ```
 //!
 //! Computing RDKit descriptors
@@ -90,7 +90,6 @@
 //! let desc = mol.get_descriptors_as_dict();
 //! let nrot = desc.get("NumRotatableBonds");
 //! let logp = desc.get("CrippenClogP");
-//!
 //! ```
 //!
 //! Creating a polars dataframe:
@@ -103,26 +102,25 @@
 //! let mut mol_list : Vec<Molecule> = rdkit_sys::read_smifile_unwrap("data/test.smi");
 //! let a: Vec<_> = mol_list.iter().map(|m| m.get_smiles("")).collect();
 //! let df = df!( "smiles" => a).unwrap();
-//!
 //! ```
-//!
 
-use serde::{Deserialize, Serialize};
-use serde_json::value::Value;
-use std::collections::HashMap;
-
-use std::ffi::{CStr, CString};
-use std::fmt::Debug;
-use std::fs::read_to_string;
-use std::mem;
-use std::os::raw::{c_char, c_void};
-
-pub use crate::bindings;
-
-use libc::free;
+use std::{
+    collections::HashMap,
+    ffi::{CStr, CString},
+    fmt::Debug,
+    fs::read_to_string,
+    mem,
+    os::raw::{c_char, c_void},
+};
 
 use bindings::{size_t, *};
-/// Basic class, implementing most functionality as member functions of a molecule object
+use libc::free;
+use serde::{Deserialize, Serialize};
+use serde_json::value::Value;
+
+pub use crate::bindings;
+/// Basic class, implementing most functionality as member functions of a
+/// molecule object
 
 pub struct Molecule {
     pkl_size: *mut size_t,
@@ -159,6 +157,7 @@ impl Molecule {
         }
         Some(Molecule { pkl_size, pkl_mol })
     }
+
     /// Constructor returning Molecule, panics if None
     pub fn get_mol(input: &str, json_info: &str) -> Molecule {
         let input_cstr = CString::new(input).unwrap();
@@ -412,6 +411,7 @@ impl Molecule {
             );
         }
     }
+
     /// Gets a [MDL molfile](https://en.wikipedia.org/wiki/Chemical_table_file) content as a string.
     pub fn get_molblock(&self, json_info: &str) -> String {
         let json_info = CString::new(json_info).unwrap();
@@ -495,15 +495,15 @@ impl Molecule {
         }
     }
 
-    pub fn get_rdkit_fp_as_bytes(&self, json_info: &str) -> Vec<i8> {
+    pub fn get_rdkit_fp_as_bytes(&self, json_info: &str) -> Vec<u8> {
         let json_info = CString::new(json_info).unwrap();
         unsafe {
             let n_bytes: *mut size_t = libc::malloc(mem::size_of::<u64>()) as *mut size_t;
             let fp_cchar: *mut c_char =
                 get_rdkit_fp_as_bytes(self.pkl_mol, *self.pkl_size, n_bytes, json_info.as_ptr());
-            let mut fp_bytes: Vec<i8> = Vec::new();
+            let mut fp_bytes: Vec<u8> = Vec::new();
             for pos in 0..*n_bytes {
-                let nb: i8 = *fp_cchar.offset(pos as _);
+                let nb: u8 = *fp_cchar.offset(pos as _) as u8;
                 fp_bytes.push(nb);
             }
             let res = fp_bytes.to_owned();
