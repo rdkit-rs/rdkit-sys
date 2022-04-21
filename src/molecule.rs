@@ -465,15 +465,15 @@ impl Molecule {
         }
     }
 
-    pub fn get_morgan_fp_as_bytes(&self, json_info: &str) -> Vec<i8> {
+    pub fn get_morgan_fp_as_bytes(&self, json_info: &str) -> Vec<u8> {
         let json_info = CString::new(json_info).unwrap();
         unsafe {
             let n_bytes: *mut u64 = libc::malloc(mem::size_of::<u64>()) as *mut u64;
             let fp_cchar: *mut c_char =
                 get_morgan_fp_as_bytes(self.pkl_mol, *self.pkl_size, n_bytes, json_info.as_ptr());
-            let mut fp_bytes: Vec<i8> = Vec::new();
+            let mut fp_bytes: Vec<u8> = Vec::new();
             for pos in 0..*n_bytes {
-                let nb: i8 = *fp_cchar.offset(pos as _);
+                let nb: u8 = *fp_cchar.offset(pos as _) as u8;
                 fp_bytes.push(nb);
             }
             let res = fp_bytes.to_owned();
@@ -525,15 +525,15 @@ impl Molecule {
         }
     }
 
-    pub fn get_pattern_fp_as_bytes(&self, json_info: &str) -> Vec<i8> {
+    pub fn get_pattern_fp_as_bytes(&self, json_info: &str) -> Vec<u8> {
         let json_info = CString::new(json_info).unwrap();
         unsafe {
             let n_bytes: *mut size_t = libc::malloc(mem::size_of::<u64>()) as *mut size_t;
             let fp_cchar: *mut c_char =
                 get_pattern_fp_as_bytes(self.pkl_mol, *self.pkl_size, n_bytes, json_info.as_ptr());
-            let mut fp_bytes: Vec<i8> = Vec::new();
+            let mut fp_bytes: Vec<u8> = Vec::new();
             for pos in 0..*n_bytes {
-                let nb: i8 = *fp_cchar.offset(pos as _);
+                let nb: u8 = *fp_cchar.offset(pos as _) as u8;
                 fp_bytes.push(nb);
             }
             let res = fp_bytes.to_owned();
@@ -994,6 +994,6 @@ mod tests {
         let orig_smiles = "CC";
         let mut pkl_mol = Molecule::new(orig_smiles, "").unwrap();
         let result = pkl_mol.fragment_parent("");
-        panic!("{} => {:?}", result, pkl_mol);
+        println!("{} => {:?}", result, pkl_mol);
     }
 }
