@@ -114,6 +114,7 @@ use std::{
 };
 
 use bindings::{size_t, *};
+use bitvec::prelude::*;
 use libc::free;
 use serde::{Deserialize, Serialize};
 use serde_json::value::Value;
@@ -465,15 +466,15 @@ impl Molecule {
         }
     }
 
-    pub fn get_morgan_fp_as_bytes(&self, json_info: &str) -> Vec<i8> {
+    pub fn get_morgan_fp_as_bytes(&self, json_info: &str) -> Vec<u8> {
         let json_info = CString::new(json_info).unwrap();
         unsafe {
-            let n_bytes: *mut u64 = libc::malloc(mem::size_of::<u64>()) as *mut u64;
+            let n_bytes: *mut size_t = libc::malloc(mem::size_of::<u64>()) as *mut u64;
             let fp_cchar: *mut c_char =
                 get_morgan_fp_as_bytes(self.pkl_mol, *self.pkl_size, n_bytes, json_info.as_ptr());
-            let mut fp_bytes: Vec<i8> = Vec::new();
+            let mut fp_bytes = Vec::with_capacity(*n_bytes as usize);
             for pos in 0..*n_bytes {
-                let nb: i8 = *fp_cchar.offset(pos as _);
+                let nb = *fp_cchar.offset(pos as _) as u8;
                 fp_bytes.push(nb);
             }
             let res = fp_bytes.to_owned();
@@ -481,6 +482,11 @@ impl Molecule {
             free_ptr(fp_cchar);
             res
         }
+    }
+
+    pub fn get_morgan_fp_as_bitvec(&self, json_info: &str) -> BitVec<u8, Lsb0> {
+        let pattern = self.get_morgan_fp_as_bytes(json_info);
+        BitVec::from_vec(pattern)
     }
 
     pub fn get_rdkit_fp(&self, json_info: &str) -> String {
@@ -501,7 +507,7 @@ impl Molecule {
             let n_bytes: *mut size_t = libc::malloc(mem::size_of::<u64>()) as *mut size_t;
             let fp_cchar: *mut c_char =
                 get_rdkit_fp_as_bytes(self.pkl_mol, *self.pkl_size, n_bytes, json_info.as_ptr());
-            let mut fp_bytes: Vec<u8> = Vec::new();
+            let mut fp_bytes = Vec::with_capacity(*n_bytes as usize);
             for pos in 0..*n_bytes {
                 let nb: u8 = *fp_cchar.offset(pos as _) as u8;
                 fp_bytes.push(nb);
@@ -511,6 +517,26 @@ impl Molecule {
             free_ptr(fp_cchar);
             res
         }
+    }
+
+    pub fn get_rdkit_fp_as_bitvec(&self, json_info: &str) -> BitVec<u8, Lsb0> {
+        let pattern = self.get_rdkit_fp_as_bytes(json_info);
+        BitVec::from_vec(pattern)
+    }
+
+    pub fn get_tanimoto_similarity(
+        &self,
+        other: &Molecule,
+        self_json_info: &str,
+        other_json_info: &str,
+    ) -> f32 {
+        let fp = self.get_rdkit_fp_as_bitvec(self_json_info);
+        let other_fp = other.get_rdkit_fp_as_bitvec(other_json_info);
+
+        let and = fp.clone() & other_fp.clone();
+        let or = fp | other_fp;
+
+        and.count_ones() as f32 / or.count_ones() as f32
     }
 
     pub fn get_pattern_fp(&self, json_info: &str) -> String {
@@ -525,15 +551,15 @@ impl Molecule {
         }
     }
 
-    pub fn get_pattern_fp_as_bytes(&self, json_info: &str) -> Vec<i8> {
+    pub fn get_pattern_fp_as_bytes(&self, json_info: &str) -> Vec<u8> {
         let json_info = CString::new(json_info).unwrap();
         unsafe {
             let n_bytes: *mut size_t = libc::malloc(mem::size_of::<u64>()) as *mut size_t;
             let fp_cchar: *mut c_char =
                 get_pattern_fp_as_bytes(self.pkl_mol, *self.pkl_size, n_bytes, json_info.as_ptr());
-            let mut fp_bytes: Vec<i8> = Vec::new();
+            let mut fp_bytes = Vec::with_capacity(*n_bytes as usize);
             for pos in 0..*n_bytes {
-                let nb: i8 = *fp_cchar.offset(pos as _);
+                let nb = *fp_cchar.offset(pos as _) as u8;
                 fp_bytes.push(nb);
             }
             let res = fp_bytes.to_owned();
@@ -541,6 +567,11 @@ impl Molecule {
             free_ptr(fp_cchar);
             res
         }
+    }
+
+    pub fn get_pattern_fp_as_bitvec(&self, json_info: &str) -> BitVec<u8, Lsb0> {
+        let pattern = self.get_pattern_fp_as_bytes(json_info);
+        BitVec::from_vec(pattern)
     }
 
     ///Gets a query molecule from a SMARTS
