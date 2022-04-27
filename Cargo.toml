@@ -11,17 +11,10 @@ exclude = ["rdkit-*", "*.tar.gz"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-serde = { version = "1", features = ["derive"]}
-serde_json = "1"
-libc = "0.2"
-flate2 = "1"
-bstr = "0.2"
-bitvec = "1.0.0"
+cxx = "1.0.66"
 
 [build-dependencies]
 pkg-config = "0.3.9"
-cmake = { version = "0.1.0" }
-bindgen = "^0.59.2"
 env_logger = "0"
-reqwest = { version = "0.11", features = ["blocking"] }
 eyre = "0.6"
+cxx-build = "1.0.67"
