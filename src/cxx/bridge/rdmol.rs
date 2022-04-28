@@ -3,15 +3,23 @@ pub mod ffi {
     unsafe extern "C++" {
         include!("wrapper/include/rdmol.h");
 
-        type ROMol;
+        pub(crate) type ROMol;
         // pub type RWMol;
+        pub(crate) type ExplicitBitVect;
+
         //
-        fn mol_from_smiles(smi: &CxxString) -> SharedPtr<ROMol>;
-        //
-        // fn to_smiles(mol: SharedPtr<ROMol>) -> UniquePtr<CxxString>;
-        //
-        // fn num_atoms(mol: SharedPtr<ROMol>) -> u32;
-        //
-        // fn to_svg(mol: SharedPtr<ROMol>) -> UniquePtr<CxxString>;
+        pub fn mol_from_smiles(smi: &CxxString) -> SharedPtr<ROMol>;
+
+        pub fn mol_to_smiles(mol: SharedPtr<ROMol>) -> String;
+
+        pub fn fingerprint_mol(mol: SharedPtr<ROMol>) -> *mut ExplicitBitVect;
+
+        pub unsafe fn copy_explicit_bit_vect(
+            fingerprint: *mut ExplicitBitVect,
+        ) -> *mut ExplicitBitVect;
+
+        pub unsafe fn fingerprint_or(left: *mut ExplicitBitVect, right: *mut ExplicitBitVect);
+        pub unsafe fn fingerprint_and(left: *mut ExplicitBitVect, right: *mut ExplicitBitVect);
+        pub unsafe fn get_num_on_bits(bitvect: *mut ExplicitBitVect) -> u32;
     }
 }

@@ -14,8 +14,16 @@ fn main() {
 
     println!("cargo:rustc-link-search=native={}", brew_lib_path);
     // println!("cargo:rustc-link-lib=dylib=stdc++");
-    println!("cargo:rustc-link-lib=static=RDKitGraphMol_static");
-    println!("cargo:rustc-link-lib=static=RDKitSmilesParse_static");
-    println!("cargo:rustc-link-lib=static=RDKitRDGeneral_static");
-    println!("cargo:rustc-link-lib=static=RDKitRDGeometryLib_static");
+
+    for lib in &[
+        "GraphMol",
+        "Fingerprints",
+        "SmilesParse",
+        "RDGeneral",
+        "RDGeometryLib",
+        "Subgraphs",
+        "DataStructs",
+    ] {
+        println!("cargo:rustc-link-lib=static=RDKit{}_static", lib);
+    }
 }
