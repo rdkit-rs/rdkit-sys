@@ -23,6 +23,7 @@ fn main() {
         "RDGeometryLib",
         "Subgraphs",
         "DataStructs",
+        "MolStandardize",
     ] {
         println!("cargo:rustc-link-lib=static=RDKit{}_static", lib);
     }

@@ -4,9 +4,12 @@
 #include "GraphMol/SmilesParse/SmilesWrite.h"
 #include "DataStructs/ExplicitBitVect.h"
 #include "GraphMol/Fingerprints/Fingerprints.h"
+#include "GraphMol/MolStandardize/Tautomer.h"
 
 namespace RDKit {
     using ExplicitBitVect = ::ExplicitBitVect;
+    using TautomerEnumerator = MolStandardize::TautomerEnumerator;
+    using TautomerEnumeratorResult = MolStandardize::TautomerEnumeratorResult;
 
     std::shared_ptr<ROMol> mol_from_smiles(const std::string &smiles) {
         std::shared_ptr<ROMol> mol(SmilesToMol(smiles)); // , &params);
@@ -35,5 +38,13 @@ namespace RDKit {
 
     unsigned int get_num_on_bits(ExplicitBitVect *bitvect) {
         return bitvect->getNumOnBits();
+    }
+
+    TautomerEnumerator *tautomer_enumerator() {
+        return new MolStandardize::TautomerEnumerator(new MolStandardize::TautomerCatalog());
+    }
+
+    TautomerEnumeratorResult *enumerate_tautomer(TautomerEnumerator *enumerator, std::shared_ptr<ROMol> mol) {
+        return enumerator->enumerate(*mol);
     }
 }
