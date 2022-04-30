@@ -1,9 +1,9 @@
 use libc::c_void;
 
-use crate::cxx::bridge::rdmol::ffi as rdmol_ffi;
+use crate::cxx::bridge::fingerprint::ffi as fingerprint_ffi;
 
 pub struct Fingerprint {
-    pub(crate) ptr: *mut rdmol_ffi::ExplicitBitVect,
+    pub(crate) ptr: *mut fingerprint_ffi::ExplicitBitVect,
 }
 
 impl Drop for Fingerprint {
@@ -15,7 +15,7 @@ impl Drop for Fingerprint {
 impl Clone for Fingerprint {
     fn clone(&self) -> Self {
         Fingerprint {
-            ptr: unsafe { rdmol_ffi::copy_explicit_bit_vect(self.ptr) },
+            ptr: unsafe { fingerprint_ffi::copy_explicit_bit_vect(self.ptr) },
         }
     }
 }
@@ -23,13 +23,13 @@ impl Clone for Fingerprint {
 impl Fingerprint {
     pub fn or(&self, other: &Fingerprint) -> Fingerprint {
         let clone = self.clone();
-        unsafe { rdmol_ffi::fingerprint_or(clone.ptr, other.ptr) }
+        unsafe { fingerprint_ffi::fingerprint_or(clone.ptr, other.ptr) }
         clone
     }
 
     pub fn and(&self, other: &Fingerprint) -> Fingerprint {
         let clone = self.clone();
-        unsafe { rdmol_ffi::fingerprint_and(clone.ptr, other.ptr) }
+        unsafe { fingerprint_ffi::fingerprint_and(clone.ptr, other.ptr) }
         clone
     }
 
@@ -37,8 +37,8 @@ impl Fingerprint {
         let and = self.and(other);
         let or = self.or(other);
 
-        let and_ones = unsafe { rdmol_ffi::get_num_on_bits(and.ptr) };
-        let or_ones = unsafe { rdmol_ffi::get_num_on_bits(or.ptr) };
+        let and_ones = unsafe { fingerprint_ffi::get_num_on_bits(and.ptr) };
+        let or_ones = unsafe { fingerprint_ffi::get_num_on_bits(or.ptr) };
 
         and_ones as f32 / or_ones as f32
     }

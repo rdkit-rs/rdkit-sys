@@ -45,6 +45,7 @@ namespace RDKit {
     }
 
     TautomerEnumeratorResult *enumerate_tautomer(TautomerEnumerator *enumerator, std::shared_ptr<ROMol> mol) {
-        return enumerator->enumerate(*mol);
+        auto iterator = enumerator->enumerate(*mol);
+        auto dangler = new TautomerEnumeratorResult();
     }
 }

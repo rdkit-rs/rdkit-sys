@@ -3,7 +3,13 @@ fn main() {
 
     let brew_lib_path = "/opt/homebrew/lib";
 
-    cxx_build::bridge("src/cxx/bridge/rdmol.rs") // returns a cc::Build
+    let bridges = ["rdmol.rs", "fingerprint.rs", "mol_standardize.rs"];
+    let bridges: Vec<_> = bridges
+        .iter()
+        .map(|x| format!("src/cxx/bridge/{}", x))
+        .collect();
+
+    cxx_build::bridges(&bridges)
         .file("wrapper/src/rdmol.cc")
         .include("/opt/homebrew/include/rdkit")
         .include("/opt/homebrew/include")
