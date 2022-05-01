@@ -8,6 +8,6 @@ pub mod ffi {
 
         pub fn mol_from_smiles(smi: &CxxString) -> SharedPtr<ROMol>;
         pub fn mol_to_smiles(mol: SharedPtr<ROMol>) -> String;
-        pub fn fingerprint_mol(mol: SharedPtr<ROMol>) -> *mut ExplicitBitVect;
+        pub fn fingerprint_mol(mol: SharedPtr<ROMol>) -> SharedPtr<ExplicitBitVect>;
     }
 }

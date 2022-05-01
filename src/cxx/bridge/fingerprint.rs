@@ -4,12 +4,12 @@ pub mod ffi {
         include!("wrapper/include/rdmol.h");
 
         pub type ExplicitBitVect;
-        pub unsafe fn copy_explicit_bit_vect(
-            fingerprint: *mut ExplicitBitVect,
-        ) -> *mut ExplicitBitVect;
+        pub fn copy_explicit_bit_vect(
+            fingerprint: SharedPtr<ExplicitBitVect>,
+        ) -> SharedPtr<ExplicitBitVect>;
 
-        pub unsafe fn fingerprint_or(left: *mut ExplicitBitVect, right: *mut ExplicitBitVect);
-        pub unsafe fn fingerprint_and(left: *mut ExplicitBitVect, right: *mut ExplicitBitVect);
-        pub unsafe fn get_num_on_bits(bitvect: *mut ExplicitBitVect) -> u32;
+        pub fn fingerprint_or(left: SharedPtr<ExplicitBitVect>, right: SharedPtr<ExplicitBitVect>);
+        pub fn fingerprint_and(left: SharedPtr<ExplicitBitVect>, right: SharedPtr<ExplicitBitVect>);
+        pub fn get_num_on_bits(bitvect: SharedPtr<ExplicitBitVect>) -> u32;
     }
 }

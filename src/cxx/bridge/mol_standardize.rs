@@ -3,10 +3,14 @@ pub mod ffi {
     unsafe extern "C++" {
         include!("wrapper/include/rdmol.h");
 
+        pub type ROMol = crate::cxx::bridge::rdmol::ffi::ROMol;
         pub type TautomerEnumerator;
         pub type TautomerEnumeratorResult;
-        pub unsafe fn tautomer_enumerator() -> *mut TautomerEnumerator;
-        // pub unsafe fn enumerate_tautomer(mol: SharedPtr<ROMol>) -> *mut
-        // TautomerEnumeratorResult;
+
+        pub fn tautomer_enumerator() -> SharedPtr<TautomerEnumerator>;
+        pub fn tautomer_enumerate(
+            tautomer_enumerator: SharedPtr<TautomerEnumerator>,
+            mol: SharedPtr<ROMol>,
+        ) -> SharedPtr<TautomerEnumeratorResult>;
     }
 }

@@ -1,21 +1,15 @@
-use libc::c_void;
+use cxx::SharedPtr;
 
 use crate::cxx::bridge::fingerprint::ffi as fingerprint_ffi;
 
 pub struct Fingerprint {
-    pub(crate) ptr: *mut fingerprint_ffi::ExplicitBitVect,
-}
-
-impl Drop for Fingerprint {
-    fn drop(&mut self) {
-        unsafe { libc::free(self.ptr as *mut c_void) }
-    }
+    pub(crate) ptr: SharedPtr<fingerprint_ffi::ExplicitBitVect>,
 }
 
 impl Clone for Fingerprint {
     fn clone(&self) -> Self {
         Fingerprint {
-            ptr: unsafe { fingerprint_ffi::copy_explicit_bit_vect(self.ptr) },
+            ptr: fingerprint_ffi::copy_explicit_bit_vect(self.ptr.clone()),
         }
     }
 }
@@ -23,13 +17,13 @@ impl Clone for Fingerprint {
 impl Fingerprint {
     pub fn or(&self, other: &Fingerprint) -> Fingerprint {
         let clone = self.clone();
-        unsafe { fingerprint_ffi::fingerprint_or(clone.ptr, other.ptr) }
+        unsafe { fingerprint_ffi::fingerprint_or(clone.ptr.clone(), other.ptr.clone()) }
         clone
     }
 
     pub fn and(&self, other: &Fingerprint) -> Fingerprint {
         let clone = self.clone();
-        unsafe { fingerprint_ffi::fingerprint_and(clone.ptr, other.ptr) }
+        unsafe { fingerprint_ffi::fingerprint_and(clone.ptr.clone(), other.ptr.clone()) }
         clone
     }
 

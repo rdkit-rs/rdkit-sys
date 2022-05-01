@@ -2,10 +2,7 @@ use std::fmt::{Debug, Formatter};
 
 use cxx::let_cxx_string;
 
-use crate::{
-    cxx::bridge::{fingerprint::ffi as fingerprint_ffi, rdmol::ffi as rdmol_ffi},
-    fingerprint::Fingerprint,
-};
+use crate::{cxx::bridge::rdmol::ffi as rdmol_ffi, fingerprint::Fingerprint};
 
 pub struct Molecule {
     ptr: cxx::SharedPtr<rdmol_ffi::ROMol>,

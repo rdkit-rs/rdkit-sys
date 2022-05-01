@@ -20,32 +20,35 @@ namespace RDKit {
         return MolToSmiles(*mol);
     }
 
-    ExplicitBitVect *fingerprint_mol(std::shared_ptr<ROMol> mol) {
-        return RDKFingerprintMol(*mol);
+    std::shared_ptr<ExplicitBitVect> fingerprint_mol(std::shared_ptr<ROMol> mol) {
+        return std::shared_ptr<ExplicitBitVect>(RDKFingerprintMol(*mol));
     }
 
-    ExplicitBitVect *copy_explicit_bit_vect(ExplicitBitVect *orig) {
-        return new ExplicitBitVect(*orig);
+    std::shared_ptr<ExplicitBitVect> copy_explicit_bit_vect(std::shared_ptr<ExplicitBitVect> orig) {
+        std::shared_ptr<ExplicitBitVect> fingerprint(new ExplicitBitVect(*orig));
+        return fingerprint;
     }
 
-    void fingerprint_or(ExplicitBitVect* left, ExplicitBitVect* right) {
+    void fingerprint_or(std::shared_ptr<ExplicitBitVect> left, std::shared_ptr<ExplicitBitVect> right) {
         left->operator|(*right);
     }
 
-    void fingerprint_and(ExplicitBitVect* left, ExplicitBitVect* right) {
+    void fingerprint_and(std::shared_ptr<ExplicitBitVect> left, std::shared_ptr<ExplicitBitVect> right) {
         left->operator&(*right);
     }
 
-    unsigned int get_num_on_bits(ExplicitBitVect *bitvect) {
+    unsigned int get_num_on_bits(std::shared_ptr<ExplicitBitVect> bitvect) {
         return bitvect->getNumOnBits();
     }
 
-    TautomerEnumerator *tautomer_enumerator() {
-        return new MolStandardize::TautomerEnumerator(new MolStandardize::TautomerCatalog());
+    std::shared_ptr<TautomerEnumerator> tautomer_enumerator() {
+        TautomerEnumerator *enumerator = new MolStandardize::TautomerEnumerator(new MolStandardize::TautomerCatalog());
+        return std::shared_ptr<TautomerEnumerator>(enumerator);
     }
 
-    TautomerEnumeratorResult *enumerate_tautomer(TautomerEnumerator *enumerator, std::shared_ptr<ROMol> mol) {
-        auto iterator = enumerator->enumerate(*mol);
-        auto dangler = new TautomerEnumeratorResult();
+    std::shared_ptr<TautomerEnumeratorResult> tautomer_enumerate(std::shared_ptr<TautomerEnumerator> enumerator, std::shared_ptr<ROMol> mol) {
+        TautomerEnumeratorResult stacked_enumerator = enumerator->enumerate(*mol);
+        TautomerEnumeratorResult *heaped_enumerator = new TautomerEnumeratorResult(stacked_enumerator);
+        return std::shared_ptr<TautomerEnumeratorResult>(heaped_enumerator);
     }
 }
