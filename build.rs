@@ -3,14 +3,12 @@ fn main() {
 
     let brew_lib_path = "/opt/homebrew/lib";
 
-    let bridges = ["rdmol.rs", "fingerprint.rs", "mol_standardize.rs"];
-    let bridges: Vec<_> = bridges
-        .iter()
-        .map(|x| format!("src/cxx/bridge/{}", x))
-        .collect();
+    let bridges = ["ro_mol", "rw_mol", "fingerprint", "mol_standardize"];
+    let bridge_rust = bridges.iter().map(|x| format!("src/bridge/{}.rs", x));
+    let wrappers_cxx = bridges.iter().map(|w| format!("wrapper/src/{}.cc", w));
 
-    cxx_build::bridges(&bridges)
-        .file("wrapper/src/rdmol.cc")
+    cxx_build::bridges(bridge_rust)
+        .files(wrappers_cxx)
         .include("/opt/homebrew/include/rdkit")
         .include("/opt/homebrew/include")
         .include(std::env::var("CARGO_MANIFEST_DIR").unwrap())

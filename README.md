@@ -7,26 +7,24 @@ How does it work?
 ---
 
 RDKit is a C++ mega-library, full of cheminformatics wisdom. We don't want to rewrite RDKit in Rust, we should instead meet somewhere in the middle and
-"bridge" Rust to C++ through some C bindings.
+"bridge" Rust to C++ through some wrappers.
+
+The goal is to do 1-1 bindings with the C++ library, exposing all the classes as we need them. The goal is _not_ to create
+a high-level binding with useful functionality strung together like in the MinimalLib (cffiwrapper). Our goal is to expose the
+building blocks. If you're looking for useful functionality strung together, check out the [rdkit](https://crates.io/crate/rdkit) crate.
 
 Prerequisites
 ---
 
 On Mac:
 
-    brew install boost cmake llvm
+    brew install rdkit
 
 boost is a RDKit C++ dependency, cmake is how you create RDKit's Makefile, llvm is used by bind-gen to create the rust
 bindings.rs file with all the dylib definitions required to use RDKit from rust.
 
 Testing
 ---
-
-Get the dylib built first, with some concurrent job spawning to go faster:
-
-    NUM_JOBS=10 cargo build -vv
-
-great for exercising the build.rs script.
 
 Or just run the test suite:
 
@@ -35,10 +33,6 @@ Or just run the test suite:
 TODO
 ---
 
- - [X] build rdkit, with useful flags, from source
- - [X] copy rdkit library files to the "right spot" in the cargo filesystem
- - [X] provide function C function definitions in a format that Rust can use
- - [X] rewrap C functions with useful high level Rust flavors (copied from chrissly31415's repo)
  - [ ] figure out how to `cargo publish` without `--no-verify` (otherwise it detects changes outside of OUTDIR)
  - [X] specify path to RDKit's cffiwrapper.h and all required search paths for other dependent headers
  - [ ] use conditional rebuild logic to make the library build experience more reliable (for now, if you get stuck, try `cargo clean` and retry with `cargo build -vv`)
