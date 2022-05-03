@@ -5,7 +5,7 @@ pub mod ffi {
         include!("wrapper/include/rw_mol.h");
 
         pub type RWMol;
-        pub type ROMol = crate::ro_mol::ffi::ROMol;
+        pub type ROMol = crate::ro_mol_ffi::ROMol;
 
         pub fn rw_mol_from_ro_mol(
             mol: SharedPtr<ROMol>,

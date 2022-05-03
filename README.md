@@ -10,8 +10,15 @@ RDKit is a C++ mega-library, full of cheminformatics wisdom. We don't want to re
 "bridge" Rust to C++ through some wrappers.
 
 The goal is to do 1-1 bindings with the C++ library, exposing all the classes as we need them. The goal is _not_ to create
-a high-level binding with useful functionality strung together like in the MinimalLib (cffiwrapper). Our goal is to expose the
-building blocks. If you're looking for useful functionality strung together, check out the [rdkit](https://crates.io/crate/rdkit) crate.
+a high-level functionality like the MinimalLib (cffiwrapper). Our goal is to expose the building blocks. If you're looking
+for idiomatic Rust, check out the [rdkit](https://crates.io/crate/rdkit) crate.
+
+Static Linking
+---
+
+The `build.rs` script informs cargo how to find headers, library files, and finally how to link the final result. This crate
+currently links all RDKit libraries statically, meaning output binaries are portable and users of your software will
+not need to find their own RDKit.
 
 Prerequisites
 ---

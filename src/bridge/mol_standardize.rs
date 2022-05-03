@@ -4,8 +4,8 @@ pub mod ffi {
         include!("wrapper/include/ro_mol.h");
         include!("wrapper/include/mol_standardize.h");
 
-        pub type ROMol = crate::ro_mol::ffi::ROMol;
-        pub type RWMol = crate::rw_mol::ffi::RWMol;
+        pub type ROMol = crate::ro_mol_ffi::ROMol;
+        pub type RWMol = crate::rw_mol_ffi::RWMol;
 
         pub type TautomerEnumerator;
         pub type TautomerEnumeratorResult;
@@ -22,6 +22,9 @@ pub mod ffi {
             tautomer_enumerator: SharedPtr<TautomerEnumerator>,
             tautomer_enumerator_result: SharedPtr<TautomerEnumeratorResult>,
         ) -> SharedPtr<ROMol>;
+
+        pub fn tautomer_enumerator_result_tautomers_size(enumerator_result: SharedPtr<TautomerEnumeratorResult>) -> i32;
+        pub fn tautomer_enumerator_result_tautomers_at(enumerator_result: SharedPtr<TautomerEnumeratorResult>, at: usize) -> SharedPtr<ROMol>;
 
         pub fn default_cleanup_parameters() -> SharedPtr<CleanupParameters>;
 
