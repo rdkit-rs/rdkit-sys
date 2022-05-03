@@ -5,7 +5,16 @@ fn main() {
 
     env_logger::init();
 
-    let brew_lib_path = "/opt/homebrew/lib";
+    let library_root = match (std::env::consts::OS, std::env::consts::ARCH) {
+        ("macos", "x86_64") => "/usr/local",
+        ("macos", "aarch64") => "/opt/homebrew",
+        ("linux", _) => "beep-beep",
+        (unsupported_os, unsupported_arch) => panic!("sorry, rdkit-sys doesn't support {} on {} at this time", unsupported_os, unsupported_arch)
+    };
+
+    let brew_lib_path = format!("{}/lib", library_root);
+    let include = format!("{}/include", library_root);
+    let rdkit_include = format!("{}/include/rdkit", library_root);
 
     let bridges = ["ro_mol", "rw_mol", "fingerprint", "mol_standardize"];
     let bridge_rust = bridges.iter().map(|x| format!("src/bridge/{}.rs", x));
@@ -13,15 +22,15 @@ fn main() {
 
     cxx_build::bridges(bridge_rust)
         .files(wrappers_cxx)
-        .include("/opt/homebrew/include/rdkit")
-        .include("/opt/homebrew/include")
+        .include(include)
+        .include(rdkit_include)
         .include(std::env::var("CARGO_MANIFEST_DIR").unwrap())
-        .flag_if_supported("-std=c++14")
+        .flag("-std=c++14")
         .warnings(false)
         .compile("rdkit");
 
     println!("cargo:rustc-link-search=native={}", brew_lib_path);
-    // println!("cargo:rustc-link-lib=dylib=stdc++");
+    // println!("cargo:rustc-link-lib=dylib=c++");
 
     for lib in &[
         "GraphMol",
