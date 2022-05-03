@@ -10,6 +10,7 @@ pub mod ffi {
         pub type TautomerEnumerator;
         pub type TautomerEnumeratorResult;
         pub type CleanupParameters;
+        pub type Uncharger;
 
         pub fn tautomer_enumerator() -> SharedPtr<TautomerEnumerator>;
 
@@ -28,11 +29,18 @@ pub mod ffi {
 
         pub fn default_cleanup_parameters() -> SharedPtr<CleanupParameters>;
 
+        pub fn new_uncharger(canonical: bool) -> SharedPtr<Uncharger>;
+        pub fn uncharger_uncharge(uncharger: SharedPtr<Uncharger>, mol: SharedPtr<RWMol>) -> SharedPtr<RWMol>;
+
         pub fn fragment_parent(
             rw_mol: SharedPtr<RWMol>,
             cleanup_params: SharedPtr<CleanupParameters>,
             skip_standardize: bool,
         ) -> SharedPtr<RWMol>;
 
+        pub fn normalize(
+            rw_mol: SharedPtr<RWMol>,
+            cleanup_params: SharedPtr<CleanupParameters>
+        ) -> SharedPtr<RWMol>;
     }
 }

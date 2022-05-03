@@ -45,4 +45,9 @@ namespace RDKit {
         RWMol *parent = RDKit::MolStandardize::fragmentParent(*rw_mol, *cleanup_params, skip_standardize);
         return std::shared_ptr<RWMol>(parent);
     }
+
+    std::shared_ptr<RWMol> normalize(std::shared_ptr<RWMol> mol, std::shared_ptr<CleanupParameters> cleanup_params) {
+        RWMol *normalized = RDKit::MolStandardize::normalize(&*mol, *cleanup_params);
+        return std::shared_ptr<RWMol>(normalized);
+    }
 }
