@@ -1,122 +1,15 @@
-#![allow(non_upper_case_globals)]
-#![allow(non_camel_case_types)]
-#![allow(non_snake_case)]
-#![allow(deref_nullptr)]
+//! rdkit-sys is a direct, one-to-one Rust binding against the RDKit C++ API
+//!
+//! Rust cannot represent C++ concepts like classes, subclasses, and structs, nor can Rust perform moves
+//! or copies. Hence, all data from the RDKit C++ API must be moved behind a "smart pointer"
+//! which will take care of freeing memory after being dropped, you will see this is pervasive as
+//! a `SharedPtr<T>` on the Rust side or `std::shared_ptr<T>` on the C++ side.
+//!
+//! It is highly recommend you read through the [RDKit C++ API documentation](https://www.rdkit.org/docs/cppapi/index.html) to learn more
+//! about what exactly is possible with RDKit.
+//!
+//! If you just want high level access to SMILE parsing and various clean up operations, please
+//! refer to the high level accompanying crate [rdkit](https://www.crates.io/crate/rdkit).
 
-use crate::molecule::Molecule;
-use flate2::bufread::GzDecoder;
-use std::fs::{read_to_string, File};
-use std::io::{BufRead, BufReader};
-use std::path::Path;
-
-pub mod bindings;
-pub mod molecule;
-
-/* this code taken from https://github.com/chrissly31415/rdkitcffi */
-
-/// read a classical .smi file
-pub fn read_smifile(smi_file: &str) -> Vec<Option<Molecule>> {
-    let smi_file = read_to_string(smi_file).expect("Could not load file.");
-    let mut mol_list: Vec<Option<Molecule>> = Vec::new();
-    let smiles_list: Vec<&str> = smi_file.split("\n").collect();
-    for s in smiles_list.iter() {
-        let s_mod = s.trim();
-        if s_mod.len() == 0 {
-            mol_list.push(None);
-            continue;
-        };
-        let mol_opt = Molecule::new(s_mod, "");
-        mol_list.push(mol_opt);
-    }
-    mol_list
-}
-
-pub fn read_sdfile_gz(sd_file_gz_path: &str) -> Vec<Option<Molecule>> {
-    let sd_file = std::fs::File::open(sd_file_gz_path).expect("Could not load file");
-    // let mut sd_file_buf_reader = std::io::Gz::new(sd_file);
-    let sd_file_decoder = flate2::bufread::GzDecoder::new(std::io::BufReader::new(sd_file));
-    let mut sd_file_decoder_buf_read = std::io::BufReader::new(sd_file_decoder);
-
-    let mut molblocks = Vec::new();
-    let mut molblock_buf = Vec::new();
-    while let Ok(_) = sd_file_decoder_buf_read.read_until(b'$', &mut molblock_buf) {
-        sd_file_decoder_buf_read.consume(3);
-
-        let molblock = std::str::from_utf8(&molblock_buf).unwrap();
-        let mol = Molecule::new(&molblock, "");
-        molblocks.push(mol);
-    }
-
-    molblocks
-}
-
-pub struct MolBlockIter<R: BufRead> {
-    buf_read: R,
-    buf: Vec<u8>,
-}
-
-impl<R: BufRead> MolBlockIter<R> {
-    pub fn new(buf_read: R) -> Self {
-        MolBlockIter {
-            buf_read,
-            buf: Vec::with_capacity(1024),
-        }
-    }
-}
-
-pub type GzBufReader = BufReader<flate2::bufread::GzDecoder<BufReader<File>>>;
-
-impl MolBlockIter<GzBufReader> {
-    pub fn from_gz_file(p: impl AsRef<Path>) -> Result<Self, Box<dyn std::error::Error>> {
-        let path = p.as_ref().to_owned();
-
-        let file = std::fs::File::open(path).unwrap();
-        let buf_reader = std::io::BufReader::new(file);
-
-        let gz_decoder = GzDecoder::new(buf_reader);
-        let gz_buf_reader = std::io::BufReader::new(gz_decoder);
-
-        Ok(Self::new(gz_buf_reader))
-    }
-}
-
-impl<R: BufRead> Iterator for MolBlockIter<R> {
-    type Item = String;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        loop {
-            self.buf.clear();
-            let read = self.buf_read.read_until(b'$', &mut self.buf).unwrap();
-            if read == 0 {
-                return None;
-            } else if read == 1 {
-                continue;
-            } else {
-                break;
-            }
-        }
-
-        let block = std::str::from_utf8(&self.buf).unwrap();
-        let block = block.trim();
-
-        return Some(block.to_owned());
-    }
-}
-
-/// read a classical .sdf file or sdf.gz
-pub fn read_sdfile(sd_file_path: &str) -> Vec<Option<Molecule>> {
-    let sd_file = std::fs::File::open(sd_file_path).expect("Could not load file");
-    let mut sd_file_buf_reader = std::io::BufReader::new(sd_file);
-
-    let mut molblocks = Vec::new();
-    let mut molblock_buf = Vec::new();
-    while let Ok(_) = sd_file_buf_reader.read_until(b'$', &mut molblock_buf) {
-        sd_file_buf_reader.consume(3);
-
-        let molblock = std::str::from_utf8(&molblock_buf).unwrap();
-        let mol = Molecule::new(&molblock, "");
-        molblocks.push(mol);
-    }
-
-    molblocks
-}
+mod bridge;
+pub use bridge::*;
