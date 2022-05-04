@@ -4,4 +4,6 @@
 
 namespace RDKit {
     std::shared_ptr<RWMol> rw_mol_from_ro_mol(std::shared_ptr<ROMol> mol, bool quick_copy, int conf_id);
+
+    std::shared_ptr<RWMol> rw_mol_from_rw_mol(std::shared_ptr<RWMol> mol);
 }

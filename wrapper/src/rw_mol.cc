@@ -6,4 +6,9 @@ namespace RDKit {
         RWMol *rw_mol = new RWMol(*mol, quick_copy, conf_id);
         return std::shared_ptr<RWMol>(rw_mol);
     }
+
+    std::shared_ptr<RWMol> rw_mol_from_rw_mol(std::shared_ptr<RWMol> mol) {
+        RWMol *rw_mol = new RWMol(*mol);
+        return std::shared_ptr<RWMol>(rw_mol);
+    }
 }

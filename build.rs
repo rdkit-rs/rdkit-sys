@@ -33,13 +33,18 @@ fn main() {
     // println!("cargo:rustc-link-lib=dylib=c++");
 
     for lib in &[
+        "Catalogs",
+        "ChemReactions",
+        "ChemTransforms",
         "DataStructs",
+        "Descriptors",
         "Fingerprints",
         "GenericGroups",
         "GraphMol",
         "MolStandardize",
         "RDGeneral",
         "RDGeometryLib",
+        "RingDecomposerLib",
         "SmilesParse",
         "Subgraphs",
         "SubstructMatch"

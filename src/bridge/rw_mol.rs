@@ -12,5 +12,9 @@ pub mod ffi {
             quick_copy: bool,
             conf_id: i32,
         ) -> SharedPtr<RWMol>;
+
+        pub fn rw_mol_from_rw_mol(
+            mol: SharedPtr<RWMol>,
+        ) -> SharedPtr<RWMol>;
     }
 }
