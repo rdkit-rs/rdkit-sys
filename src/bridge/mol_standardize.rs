@@ -30,7 +30,7 @@ pub mod ffi {
         pub fn default_cleanup_parameters() -> SharedPtr<CleanupParameters>;
 
         pub fn new_uncharger(canonical: bool) -> SharedPtr<Uncharger>;
-        pub fn uncharger_uncharge(uncharger: SharedPtr<Uncharger>, mol: SharedPtr<RWMol>) -> SharedPtr<RWMol>;
+        pub fn uncharger_uncharge(uncharger: SharedPtr<Uncharger>, mol: SharedPtr<ROMol>) -> SharedPtr<ROMol>;
 
         pub fn fragment_parent(
             rw_mol: SharedPtr<RWMol>,

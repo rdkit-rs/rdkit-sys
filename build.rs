@@ -33,14 +33,16 @@ fn main() {
     // println!("cargo:rustc-link-lib=dylib=c++");
 
     for lib in &[
-        "GraphMol",
+        "DataStructs",
         "Fingerprints",
-        "SmilesParse",
+        "GenericGroups",
+        "GraphMol",
+        "MolStandardize",
         "RDGeneral",
         "RDGeometryLib",
+        "SmilesParse",
         "Subgraphs",
-        "DataStructs",
-        "MolStandardize",
+        "SubstructMatch"
     ] {
         println!("cargo:rustc-link-lib=static=RDKit{}_static", lib);
     }

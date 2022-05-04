@@ -10,6 +10,7 @@ namespace RDKit {
     using TautomerEnumerator = MolStandardize::TautomerEnumerator;
     using TautomerEnumeratorResult = MolStandardize::TautomerEnumeratorResult;
     using CleanupParameters = MolStandardize::CleanupParameters;
+    using Uncharger = MolStandardize::Uncharger;
 
     std::shared_ptr<TautomerEnumerator> tautomer_enumerator() {
         TautomerEnumerator *enumerator = new MolStandardize::TautomerEnumerator(new MolStandardize::TautomerCatalog());
@@ -39,6 +40,15 @@ namespace RDKit {
     std::shared_ptr<CleanupParameters> default_cleanup_parameters() {
         CleanupParameters *heap_cp = new CleanupParameters(MolStandardize::defaultCleanupParameters);
         return std::shared_ptr<CleanupParameters>(heap_cp);
+    }
+
+    std::shared_ptr<Uncharger> new_uncharger(bool canonical) {
+        return std::shared_ptr<Uncharger>(new Uncharger(canonical));
+    }
+
+    std::shared_ptr<ROMol> uncharger_uncharge(std::shared_ptr<Uncharger> uncharger, std::shared_ptr<ROMol> mol) {
+        ROMol *return_mol = uncharger->uncharge(*mol);
+        return std::shared_ptr<ROMol>(return_mol);
     }
 
     std::shared_ptr<RWMol> fragment_parent(std::shared_ptr<RWMol> rw_mol, std::shared_ptr<CleanupParameters> cleanup_params, bool skip_standardize) {
