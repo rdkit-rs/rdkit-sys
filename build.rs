@@ -8,7 +8,7 @@ fn main() {
     let library_root = match (std::env::consts::OS, std::env::consts::ARCH) {
         ("macos", "x86_64") => "/usr/local",
         ("macos", "aarch64") => "/opt/homebrew",
-        ("linux", _) => "beep-beep",
+        ("linux", _) => "/usr",
         (unsupported_os, unsupported_arch) => panic!("sorry, rdkit-sys doesn't support {} on {} at this time", unsupported_os, unsupported_arch)
     };
 
