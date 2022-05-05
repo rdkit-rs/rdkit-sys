@@ -51,4 +51,5 @@ fn main() {
     ] {
         println!("cargo:rustc-link-lib=static=RDKit{}_static", lib);
     }
+    println!("cargo:rustc-link-lib=static=boost_serialization");
 }
