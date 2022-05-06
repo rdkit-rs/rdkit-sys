@@ -18,14 +18,12 @@ pub mod ffi {
             tautomer_enumerator: SharedPtr<TautomerEnumerator>,
             mol: SharedPtr<ROMol>,
         ) -> SharedPtr<TautomerEnumeratorResult>;
-
-        pub fn tautomer_enumerator_pick_canonical(
-            tautomer_enumerator: SharedPtr<TautomerEnumerator>,
-            tautomer_enumerator_result: SharedPtr<TautomerEnumeratorResult>,
-        ) -> SharedPtr<ROMol>;
-
         pub fn tautomer_enumerator_result_tautomers_size(enumerator_result: SharedPtr<TautomerEnumeratorResult>) -> i32;
         pub fn tautomer_enumerator_result_tautomers_at(enumerator_result: SharedPtr<TautomerEnumeratorResult>, at: usize) -> SharedPtr<ROMol>;
+        pub fn tautomer_enumerator_canonicalize(
+            tautomer_enumerator: SharedPtr<TautomerEnumerator>,
+            mol: SharedPtr<ROMol>
+        ) -> SharedPtr<ROMol>;
 
         pub fn default_cleanup_parameters() -> SharedPtr<CleanupParameters>;
 

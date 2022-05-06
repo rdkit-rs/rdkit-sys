@@ -34,9 +34,9 @@ namespace RDKit {
         return std::shared_ptr<ROMol>(new ROMol(*sptr));
     }
 
-    std::shared_ptr<ROMol> tautomer_enumerator_pick_canonical(std::shared_ptr<TautomerEnumerator> enumerator, std::shared_ptr<TautomerEnumeratorResult> enumerator_result) {
-        ROMol *mol = enumerator->pickCanonical(*enumerator_result);
-        return std::shared_ptr<ROMol>(mol);
+    std::shared_ptr<ROMol> tautomer_enumerator_canonicalize(std::shared_ptr<TautomerEnumerator> enumerator, std::shared_ptr<ROMol> mol) {
+        ROMol *canonical_mol = enumerator->canonicalize(*mol);
+        return std::shared_ptr<ROMol>(canonical_mol);
     }
 
     std::shared_ptr<CleanupParameters> default_cleanup_parameters() {

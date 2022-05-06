@@ -13,7 +13,7 @@ namespace RDKit {
 
     std::shared_ptr<TautomerEnumerator> tautomer_enumerator();
     std::shared_ptr<TautomerEnumeratorResult> tautomer_enumerate(std::shared_ptr<TautomerEnumerator> enumerator, std::shared_ptr<ROMol> mol);
-    std::shared_ptr<ROMol> tautomer_enumerator_pick_canonical(std::shared_ptr<TautomerEnumerator> enumerator, std::shared_ptr<TautomerEnumeratorResult> enumerator_result);
+    std::shared_ptr<ROMol> tautomer_enumerator_canonicalize(std::shared_ptr<TautomerEnumerator> enumerator, std::shared_ptr<ROMol> mol);
 
     // I couldn't figure out a better way to return a vec of rolmols, check the backlog.md for more info
     int tautomer_enumerator_result_tautomers_size(std::shared_ptr<TautomerEnumeratorResult> enumerator_result);
