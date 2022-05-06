@@ -27,10 +27,12 @@ fn main() {
         .include(std::env::var("CARGO_MANIFEST_DIR").unwrap())
         .flag("-std=c++14")
         .warnings(false)
+        // rdkit has warnings that blow up our build. we could enumerate all those warnings and tell the compiler to allow them...
+        // .warnings_into_errors(true)
         .compile("rdkit");
 
     println!("cargo:rustc-link-search=native={}", brew_lib_path);
-    // println!("cargo:rustc-link-lib=dylib=c++");
+    // println!("cargo:rustc-link-lib=static=c++");
 
     for lib in &[
         "Catalogs",

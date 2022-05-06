@@ -7,13 +7,15 @@
 
 namespace RDKit {
     using ROMol = RDKit::ROMol;
+    using TautomerCatalogParams = MolStandardize::TautomerCatalogParams;
+    using TautomerCatalog = MolStandardize::TautomerCatalog;
     using TautomerEnumerator = MolStandardize::TautomerEnumerator;
     using TautomerEnumeratorResult = MolStandardize::TautomerEnumeratorResult;
     using CleanupParameters = MolStandardize::CleanupParameters;
     using Uncharger = MolStandardize::Uncharger;
 
     std::shared_ptr<TautomerEnumerator> tautomer_enumerator() {
-        TautomerEnumerator *enumerator = new MolStandardize::TautomerEnumerator(new MolStandardize::TautomerCatalog());
+        TautomerEnumerator *enumerator = new MolStandardize::TautomerEnumerator();
         return std::shared_ptr<TautomerEnumerator>(enumerator);
     }
 
