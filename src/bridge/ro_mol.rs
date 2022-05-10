@@ -6,6 +6,8 @@ pub mod ffi {
         pub type ROMol;
         pub type ExplicitBitVect = crate::fingerprint_ffi::ExplicitBitVect;
 
+        pub fn copy_mol(mol: SharedPtr<ROMol>) -> SharedPtr<ROMol>;
+
         pub fn mol_from_smiles(smi: &CxxString) -> SharedPtr<ROMol>;
         pub fn mol_to_smiles(mol: SharedPtr<ROMol>) -> String;
     }

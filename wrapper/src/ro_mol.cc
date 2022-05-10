@@ -9,6 +9,10 @@
 namespace RDKit {
     using ExplicitBitVect = ::ExplicitBitVect;
 
+    std::shared_ptr<ROMol> copy_mol(std::shared_ptr<ROMol> mol) {
+        return std::shared_ptr<ROMol>(new ROMol(*mol));
+    }
+
     std::shared_ptr<ROMol> mol_from_smiles(const std::string &smiles) {
         std::shared_ptr<ROMol> mol(SmilesToMol(smiles)); // , &params);
         return mol;
