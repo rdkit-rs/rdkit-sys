@@ -16,7 +16,7 @@ fn main() {
     let include = format!("{}/include", library_root);
     let rdkit_include = format!("{}/include/rdkit", library_root);
 
-    let bridges = ["ro_mol", "rw_mol", "fingerprint", "mol_standardize"];
+    let bridges = ["ro_mol", "rw_mol", "fingerprint", "mol_standardize", "substruct_match"];
     let bridge_rust = bridges.iter().map(|x| format!("src/bridge/{}.rs", x));
     let wrappers_cxx = bridges.iter().map(|w| format!("wrapper/src/{}.cc", w));
 

@@ -9,3 +9,6 @@ pub use ro_mol::ffi as ro_mol_ffi;
 
 mod rw_mol;
 pub use rw_mol::ffi as rw_mol_ffi;
+
+mod substruct_match;
+pub use substruct_match::ffi as substruct_match_ffi;
