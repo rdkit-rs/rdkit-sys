@@ -1,6 +1,6 @@
 fn main() {
     if std::env::var("DOCS_RS").is_ok() {
-        return
+        return;
     }
 
     env_logger::init();
@@ -9,7 +9,10 @@ fn main() {
         ("macos", "x86_64") => "/usr/local",
         ("macos", "aarch64") => "/opt/homebrew",
         ("linux", _) => "/usr",
-        (unsupported_os, unsupported_arch) => panic!("sorry, rdkit-sys doesn't support {} on {} at this time", unsupported_os, unsupported_arch)
+        (unsupported_os, unsupported_arch) => panic!(
+            "sorry, rdkit-sys doesn't support {} on {} at this time",
+            unsupported_os, unsupported_arch
+        ),
     };
 
     let brew_lib_path = format!("{}/lib", library_root);
@@ -17,15 +20,20 @@ fn main() {
     let rdkit_include = format!("{}/include/rdkit", library_root);
 
     let dir = std::fs::read_dir("src/bridge").unwrap();
-    let rust_files = dir.into_iter().filter_map(|p| match p {
-        Ok(p) => if p.metadata().unwrap().is_file() {
-            Some(p.path())
-        } else {
-            None
-        },
-        Err(_) => None
-    }).filter(|p| !p.ends_with("mod.rs")).collect::<Vec<_>>();
-
+    let rust_files = dir
+        .into_iter()
+        .filter_map(|p| match p {
+            Ok(p) => {
+                if p.metadata().unwrap().is_file() {
+                    Some(p.path())
+                } else {
+                    None
+                }
+            }
+            Err(_) => None,
+        })
+        .filter(|p| !p.ends_with("mod.rs"))
+        .collect::<Vec<_>>();
 
     let mut cc_paths = vec![];
 
@@ -33,7 +41,7 @@ fn main() {
     for file in &rust_files {
         let file_name = file.file_name().unwrap();
         let file_name = file_name.to_str().unwrap();
-        let base_name = &file_name[0..file_name.len()-3];
+        let base_name = &file_name[0..file_name.len() - 3];
 
         let cc_path = wrapper_root.join("src").join(format!("{}.cc", base_name));
         let meta = std::fs::metadata(&cc_path).unwrap();
@@ -42,7 +50,9 @@ fn main() {
         }
         cc_paths.push(cc_path);
 
-        let h_path = wrapper_root.join("include").join(format!("{}.h", base_name));
+        let h_path = wrapper_root
+            .join("include")
+            .join(format!("{}.h", base_name));
         let meta = std::fs::metadata(&h_path).unwrap();
         if !meta.is_file() {
             panic!("{} must exist", h_path.display())
@@ -56,8 +66,8 @@ fn main() {
         .include(std::env::var("CARGO_MANIFEST_DIR").unwrap())
         .flag("-std=c++14")
         .warnings(false)
-        // rdkit has warnings that blow up our build. we could enumerate all those warnings and tell the compiler to allow them...
-        // .warnings_into_errors(true)
+        // rdkit has warnings that blow up our build. we could enumerate all those warnings and tell
+        // the compiler to allow them... .warnings_into_errors(true)
         .compile("rdkit");
 
     println!("cargo:rustc-link-search=native={}", brew_lib_path);
@@ -69,6 +79,7 @@ fn main() {
         "ChemTransforms",
         "DataStructs",
         "Descriptors",
+        "FileParsers",
         "Fingerprints",
         "GenericGroups",
         "GraphMol",
@@ -78,7 +89,7 @@ fn main() {
         "RingDecomposerLib",
         "SmilesParse",
         "Subgraphs",
-        "SubstructMatch"
+        "SubstructMatch",
     ] {
         println!("cargo:rustc-link-lib=static=RDKit{}_static", lib);
     }
