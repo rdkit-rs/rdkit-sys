@@ -16,12 +16,41 @@ fn main() {
     let include = format!("{}/include", library_root);
     let rdkit_include = format!("{}/include/rdkit", library_root);
 
-    let bridges = ["ro_mol", "rw_mol", "fingerprint", "mol_standardize", "substruct_match"];
-    let bridge_rust = bridges.iter().map(|x| format!("src/bridge/{}.rs", x));
-    let wrappers_cxx = bridges.iter().map(|w| format!("wrapper/src/{}.cc", w));
+    let dir = std::fs::read_dir("src/bridge").unwrap();
+    let rust_files = dir.into_iter().filter_map(|p| match p {
+        Ok(p) => if p.metadata().unwrap().is_file() {
+            Some(p.path())
+        } else {
+            None
+        },
+        Err(_) => None
+    }).filter(|p| !p.ends_with("mod.rs")).collect::<Vec<_>>();
 
-    cxx_build::bridges(bridge_rust)
-        .files(wrappers_cxx)
+
+    let mut cc_paths = vec![];
+
+    let wrapper_root = std::path::PathBuf::from("wrapper");
+    for file in &rust_files {
+        let file_name = file.file_name().unwrap();
+        let file_name = file_name.to_str().unwrap();
+        let base_name = &file_name[0..file_name.len()-3];
+
+        let cc_path = wrapper_root.join("src").join(format!("{}.cc", base_name));
+        let meta = std::fs::metadata(&cc_path).unwrap();
+        if !meta.is_file() {
+            panic!("{} must exist", cc_path.display())
+        }
+        cc_paths.push(cc_path);
+
+        let h_path = wrapper_root.join("include").join(format!("{}.h", base_name));
+        let meta = std::fs::metadata(&h_path).unwrap();
+        if !meta.is_file() {
+            panic!("{} must exist", h_path.display())
+        }
+    }
+
+    cxx_build::bridges(rust_files)
+        .files(cc_paths)
         .include(include)
         .include(rdkit_include)
         .include(std::env::var("CARGO_MANIFEST_DIR").unwrap())

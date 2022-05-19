@@ -1,3 +1,6 @@
+mod descriptors;
+pub use descriptors::ffi as descriptors_ffi;
+
 mod fingerprint;
 pub use fingerprint::ffi as fingerprint_ffi;
 
