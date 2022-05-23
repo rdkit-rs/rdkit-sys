@@ -8,7 +8,12 @@ pub mod ffi {
         pub type Properties;
 
         pub fn new_properties() -> SharedPtr<Properties>;
-        pub fn get_property_names(properties: SharedPtr<Properties>) -> UniquePtr<CxxVector<CxxString>>;
-        pub fn compute_properties(properties: SharedPtr<Properties>, mol: SharedPtr<ROMol>) -> UniquePtr<CxxVector<f64>>;
+        pub fn get_property_names(
+            properties: SharedPtr<Properties>,
+        ) -> UniquePtr<CxxVector<CxxString>>;
+        pub fn compute_properties(
+            properties: SharedPtr<Properties>,
+            mol: SharedPtr<ROMol>,
+        ) -> UniquePtr<CxxVector<f64>>;
     }
 }

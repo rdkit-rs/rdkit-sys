@@ -23,4 +23,12 @@ namespace RDKit {
     unsigned int get_num_on_bits(std::shared_ptr<ExplicitBitVect> bitvect) {
         return bitvect->getNumOnBits();
     }
+
+    std::unique_ptr<std::vector<uint8_t>> explicit_bit_vect_to_bytes_vec(std::shared_ptr<ExplicitBitVect> bitvect) {
+        std::vector<uint8_t> bytes;
+        bytes.reserve(bitvect->dp_bits->num_blocks());
+        boost::to_block_range(*bitvect->dp_bits, (std::back_inserter(bytes)));
+        std::vector<uint8_t> *bytes_heap = new std::vector<uint8_t>(bytes);
+        return std::unique_ptr<std::vector<uint8_t>>(bytes_heap);
+    }
 }

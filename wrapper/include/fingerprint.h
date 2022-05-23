@@ -10,4 +10,6 @@ namespace RDKit {
     void fingerprint_or_alt(std::shared_ptr<ExplicitBitVect> left, std::shared_ptr<ExplicitBitVect> right);
     void fingerprint_and(std::shared_ptr<ExplicitBitVect> left, std::shared_ptr<ExplicitBitVect> right);
     unsigned int get_num_on_bits(std::shared_ptr<ExplicitBitVect> bitvect);
+
+    std::unique_ptr<std::vector<uint8_t>> explicit_bit_vect_to_bytes_vec(std::shared_ptr<ExplicitBitVect> bitvect);
 }

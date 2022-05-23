@@ -1,5 +1,3 @@
-
-
 #[cxx::bridge(namespace = "RDKit")]
 pub mod ffi {
     unsafe extern "C++" {
