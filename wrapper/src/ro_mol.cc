@@ -14,8 +14,14 @@ namespace RDKit {
     }
 
     std::shared_ptr<ROMol> mol_from_smiles(const std::string &smiles) {
-        std::shared_ptr<ROMol> mol(SmilesToMol(smiles)); // , &params);
-        return mol;
+        ROMol *mol;
+        try {
+            mol = SmilesToMol(smiles);
+        } catch (const RDKit::AtomValenceException &e) {
+            mol = nullptr;
+        }
+
+        return std::shared_ptr<ROMol>(mol);
     }
 
      rust::String mol_to_smiles(std::shared_ptr<ROMol> mol) {

@@ -183,3 +183,134 @@ CC(=O)OC(CC(=O)[O-])C[N+](C)(C)C
     let smiles = rdkit_sys::ro_mol_ffi::mol_to_smiles(ro_mol);
     assert_eq!("[H]C([H])([H])C(=O)OC([H])(C([H])([H])C(=O)[O-])C([H])([H])[N+](C([H])([H])[H])(C([H])([H])[H])C([H])([H])[H]", &smiles);
 }
+
+#[test]
+fn test_bad_mol_block() {
+    let bad = r#"24258
+  -OEChem-02132200252D
+
+  5  4  0     0  0  0  0  0  0999 V2000
+    2.8660    0.0000    0.0000 Cl  0  0  0  0  0  0  0  0  0  0  0  0
+    3.7320    0.5000    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0
+    2.0000   -0.5000    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+    2.3660    0.8660    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+    3.3660   -0.8660    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+  1  2  1  0  0  0  0
+  1  3  2  0  0  0  0
+  1  4  2  0  0  0  0
+  1  5  2  0  0  0  0
+M  END
+> <PUBCHEM_COMPOUND_CID>
+24258
+
+> <PUBCHEM_COMPOUND_CANONICALIZED>
+1
+
+> <PUBCHEM_CACTVS_COMPLEXITY>
+117
+
+> <PUBCHEM_CACTVS_HBOND_ACCEPTOR>
+4
+
+> <PUBCHEM_CACTVS_HBOND_DONOR>
+0
+
+> <PUBCHEM_CACTVS_ROTATABLE_BOND>
+0
+
+> <PUBCHEM_CACTVS_SUBSKEYS>
+AAADcQAAMQAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+
+> <PUBCHEM_IUPAC_OPENEYE_NAME>
+perchloryl fluoride
+
+> <PUBCHEM_IUPAC_CAS_NAME>
+perchloryl fluoride
+
+> <PUBCHEM_IUPAC_NAME_MARKUP>
+perchloryl fluoride
+
+> <PUBCHEM_IUPAC_NAME>
+perchloryl fluoride
+
+> <PUBCHEM_IUPAC_SYSTEMATIC_NAME>
+perchloryl fluoride
+
+> <PUBCHEM_IUPAC_TRADITIONAL_NAME>
+perchloryl fluoride
+
+> <PUBCHEM_IUPAC_INCHI>
+InChI=1S/ClFO3/c2-1(3,4)5
+
+> <PUBCHEM_IUPAC_INCHIKEY>
+XHFXMNZYIKFCPN-UHFFFAOYSA-N
+
+> <PUBCHEM_XLOGP3_AA>
+3.3
+
+> <PUBCHEM_EXACT_MASS>
+101.9519997
+
+> <PUBCHEM_MOLECULAR_FORMULA>
+ClFO3
+
+> <PUBCHEM_MOLECULAR_WEIGHT>
+102.45
+
+> <PUBCHEM_OPENEYE_CAN_SMILES>
+O=Cl(=O)(=O)F
+
+> <PUBCHEM_OPENEYE_ISO_SMILES>
+O=Cl(=O)(=O)F
+
+> <PUBCHEM_CACTVS_TPSA>
+51.2
+
+> <PUBCHEM_MONOISOTOPIC_WEIGHT>
+101.9519997
+
+> <PUBCHEM_TOTAL_CHARGE>
+0
+
+> <PUBCHEM_HEAVY_ATOM_COUNT>
+5
+
+> <PUBCHEM_ATOM_DEF_STEREO_COUNT>
+0
+
+> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>
+0
+
+> <PUBCHEM_BOND_DEF_STEREO_COUNT>
+0
+
+> <PUBCHEM_BOND_UDEF_STEREO_COUNT>
+0
+
+> <PUBCHEM_ISOTOPIC_ATOM_COUNT>
+0
+
+> <PUBCHEM_COMPONENT_COUNT>
+1
+
+> <PUBCHEM_CACTVS_TAUTO_COUNT>
+1
+
+> <PUBCHEM_COORDINATE_TYPE>
+1
+5
+255
+
+$"#;
+    let_cxx_string!(bad = bad);
+
+    let mol = {
+        let mut mol = rdkit_sys::rw_mol_ffi::rw_mol_from_mol_block(&bad, true, false, false);
+        if mol.is_null() {
+            mol = rdkit_sys::rw_mol_ffi::rw_mol_from_mol_block(&bad, false, false, false);
+        }
+        mol
+    };
+    assert!(!mol.is_null());
+    // println!("{}", mol.as_smile());
+}

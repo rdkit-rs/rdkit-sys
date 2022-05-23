@@ -10,6 +10,8 @@ namespace RDKit {
             mol = MolBlockToMol(mol_block, sanitize, remove_hs, strict_parsing);
         } catch (const RDKit::FileParseException &e) {
             mol = nullptr;
+        } catch (const RDKit::AtomValenceException &e) {
+            mol = nullptr;
         }
         return std::shared_ptr<RWMol>(mol);
     }
