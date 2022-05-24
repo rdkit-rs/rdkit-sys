@@ -1,3 +1,33 @@
+0.2.10
+---
+
+ * update bridge to catch atomvalenceexception and return nullptr
+
+0.2.9
+---
+
+ * convert fingerprint to vec, switching from boost dynamic_bitvect to rust bitvec for ergonomics
+
+0.2.8
+---
+
+ * RWMol molblock support
+
+0.2.7
+---
+
+ * build.rs refactoring: introspect bridge files to build list of .cc/.h files
+
+0.2.6
+---
+
+ * Substruct match
+
+0.2.5
+---
+
+ * ROMol copy
+
 0.2.4
 ---
 
