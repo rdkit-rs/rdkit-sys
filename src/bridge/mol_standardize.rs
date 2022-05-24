@@ -18,17 +18,25 @@ pub mod ffi {
             tautomer_enumerator: SharedPtr<TautomerEnumerator>,
             mol: SharedPtr<ROMol>,
         ) -> SharedPtr<TautomerEnumeratorResult>;
-        pub fn tautomer_enumerator_result_tautomers_size(enumerator_result: SharedPtr<TautomerEnumeratorResult>) -> i32;
-        pub fn tautomer_enumerator_result_tautomers_at(enumerator_result: SharedPtr<TautomerEnumeratorResult>, at: usize) -> SharedPtr<ROMol>;
+        pub fn tautomer_enumerator_result_tautomers_size(
+            enumerator_result: SharedPtr<TautomerEnumeratorResult>,
+        ) -> i32;
+        pub fn tautomer_enumerator_result_tautomers_at(
+            enumerator_result: SharedPtr<TautomerEnumeratorResult>,
+            at: usize,
+        ) -> SharedPtr<ROMol>;
         pub fn tautomer_enumerator_canonicalize(
             tautomer_enumerator: SharedPtr<TautomerEnumerator>,
-            mol: SharedPtr<ROMol>
+            mol: SharedPtr<ROMol>,
         ) -> SharedPtr<ROMol>;
 
         pub fn default_cleanup_parameters() -> SharedPtr<CleanupParameters>;
 
         pub fn new_uncharger(canonical: bool) -> SharedPtr<Uncharger>;
-        pub fn uncharger_uncharge(uncharger: SharedPtr<Uncharger>, mol: SharedPtr<ROMol>) -> SharedPtr<ROMol>;
+        pub fn uncharger_uncharge(
+            uncharger: SharedPtr<Uncharger>,
+            mol: SharedPtr<ROMol>,
+        ) -> SharedPtr<ROMol>;
 
         pub fn fragment_parent(
             rw_mol: SharedPtr<RWMol>,
@@ -38,7 +46,7 @@ pub mod ffi {
 
         pub fn normalize(
             rw_mol: SharedPtr<RWMol>,
-            cleanup_params: SharedPtr<CleanupParameters>
+            cleanup_params: SharedPtr<CleanupParameters>,
         ) -> SharedPtr<RWMol>;
     }
 }
