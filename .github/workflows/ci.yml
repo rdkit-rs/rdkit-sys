@@ -11,4 +11,4 @@ jobs:
       - name: Docker
         run: |
           docker build -t conda -f docker/Dockerfile.conda docker/
-          docker run --rm -v $PWD:/code --workdir=/code conda cargo test
+          docker run --rm -v $PWD:/code --workdir=/code -e USE_CONDA=true conda cargo test
