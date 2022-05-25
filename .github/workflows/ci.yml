@@ -9,7 +9,6 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Docker
-        # (Optional)If you have the theme added as submodule, you can pull it and use the most updated version
         run: |
           docker build -t conda -f docker/Dockerfile.conda docker/
           docker run --rm -it -v $PWD:/code --workdir=/code conda cargo test
