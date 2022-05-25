@@ -26,7 +26,7 @@ jobs:
         run: conda install -c conda-forge rdkit==2022.03.1
 
       - name: Debug
-        run: conda info --base && ls -alh $(conda info --base) && ls -alh $(conda info --base)/lib
+        run: conda info --base && ls -alh $(conda info --base) && ls -alh $(conda info --base)/lib && echo $CONDA_PREFIX
 
       - name: Install stable
         uses: actions-rs/toolchain@v1
