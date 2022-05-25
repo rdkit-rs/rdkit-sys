@@ -38,3 +38,5 @@ jobs:
 
       - name: Cargo test
         run: cargo test --features=dynamic-linking-from-conda
+        env:
+          LD_LIBRARY_PATH: /usr/local/lib:/usr/share/miniconda/envs/test/lib
