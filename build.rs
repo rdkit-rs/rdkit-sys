@@ -6,27 +6,31 @@ fn main() {
     env_logger::init();
 
     let use_conda = std::env::var("CARGO_FEATURE_DYNAMIC_LINKING_FROM_CONDA").is_ok();
-    let conda = which::which("conda").map(|p| p.to_str().unwrap().to_string());
 
-    let library_root = match (
-        std::env::consts::OS,
-        std::env::consts::ARCH,
-        use_conda,
-        conda,
-    ) {
-        (_, _, true, Ok(conda)) => {
-            let mut conda = std::process::Command::new(conda);
-            conda.args(&["info", "--base"]);
-            let output = conda.output().unwrap();
-            let stdout = String::from_utf8(output.stdout).unwrap();
-            stdout.trim().to_string()
+    let library_root = match (std::env::consts::OS, std::env::consts::ARCH, use_conda) {
+        (_, _, true) => {
+            // prefer the prefix env var, if not, fall back to the base from the CLI
+            match std::env::var("CONDA_PREFIX") {
+                Ok(prefix) => prefix.to_string(),
+                Err(_) => {
+                    let conda = which::which("conda")
+                        .map(|p| p.to_str().unwrap().to_string())
+                        .unwrap_or_else(|_| panic!("conda not found"));
+                    let mut conda = std::process::Command::new(conda);
+                    conda.args(&["info", "--base"]);
+
+                    let output = conda.output().unwrap();
+                    let stdout = String::from_utf8(output.stdout).unwrap();
+                    stdout.trim().to_string()
+                }
+            }
         }
-        ("macos", "x86_64", _, _) => "/usr/local".to_string(),
-        ("macos", "aarch64", _, _) => "/opt/homebrew".to_string(),
-        ("linux", _, _, _) => "/usr".to_string(),
-        (unsupported_os, unsupported_arch, _, conda) => panic!(
-            "sorry, rdkit-sys doesn't support {}/{}/{:?} at this time",
-            unsupported_os, unsupported_arch, conda
+        ("macos", "x86_64", _) => "/usr/local".to_string(),
+        ("macos", "aarch64", _) => "/opt/homebrew".to_string(),
+        ("linux", _, _) => "/usr".to_string(),
+        (unsupported_os, unsupported_arch, use_conda) => panic!(
+            "sorry, rdkit-sys doesn't support {}/{}/use_conda={} at this time",
+            unsupported_os, unsupported_arch, use_conda
         ),
     };
 
