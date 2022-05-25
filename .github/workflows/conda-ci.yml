@@ -4,6 +4,9 @@ on:
 jobs:
   conda-ci:
     runs-on: ubuntu-22.04
+    defaults:
+      run:
+        shell: bash -l {0}
     steps:
       - name: Git checkout
         uses: actions/checkout@v2
