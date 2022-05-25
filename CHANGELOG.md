@@ -1,3 +1,8 @@
+0.2.12
+---
+
+ * conda support in build.rs and finally builds in CI!
+
 0.2.10
 ---
 
