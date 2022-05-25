@@ -8,7 +8,7 @@ RUN curl -O https://repo.anaconda.com/miniconda/Miniconda3-py37_4.12.0-Linux-$(u
     chmod u+x Miniconda3-py37_4.12.0-Linux-$(uname -p).sh && \
     bash Miniconda3-py37_4.12.0-Linux-$(uname -p).sh -b && \
     rm Miniconda3-py37_4.12.0-Linux-$(uname -p).sh && \
-    echo /root/miniconda3/lib > /etc/ld.so.conf.d/conda.conf && \
+    echo /root/miniconda3/lib > /etc/ld.so.conf.d/zz-conda.conf && \
     ldconfig
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
