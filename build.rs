@@ -5,13 +5,32 @@ fn main() {
 
     env_logger::init();
 
-    let library_root = match (std::env::consts::OS, std::env::consts::ARCH) {
-        ("macos", "x86_64") => "/usr/local",
-        ("macos", "aarch64") => "/opt/homebrew",
-        ("linux", _) => "/usr",
-        (unsupported_os, unsupported_arch) => panic!(
-            "sorry, rdkit-sys doesn't support {} on {} at this time",
-            unsupported_os, unsupported_arch
+    let use_conda = std::env::var("CARGO_FEATURE_DYNAMIC_LINKING_FROM_CONDA").is_ok();
+
+    let library_root = match (std::env::consts::OS, std::env::consts::ARCH, use_conda) {
+        (_, _, true) => {
+            // prefer the prefix env var, if not, fall back to the base from the CLI
+            match std::env::var("CONDA_PREFIX") {
+                Ok(prefix) => prefix.to_string(),
+                Err(_) => {
+                    let conda = which::which("conda")
+                        .map(|p| p.to_str().unwrap().to_string())
+                        .unwrap_or_else(|_| panic!("conda not found"));
+                    let mut conda = std::process::Command::new(conda);
+                    conda.args(&["info", "--base"]);
+
+                    let output = conda.output().unwrap();
+                    let stdout = String::from_utf8(output.stdout).unwrap();
+                    stdout.trim().to_string()
+                }
+            }
+        }
+        ("macos", "x86_64", _) => "/usr/local".to_string(),
+        ("macos", "aarch64", _) => "/opt/homebrew".to_string(),
+        ("linux", _, _) => "/usr".to_string(),
+        (unsupported_os, unsupported_arch, use_conda) => panic!(
+            "sorry, rdkit-sys doesn't support {}/{}/use_conda={} at this time",
+            unsupported_os, unsupported_arch, use_conda
         ),
     };
 
@@ -91,7 +110,16 @@ fn main() {
         "Subgraphs",
         "SubstructMatch",
     ] {
-        println!("cargo:rustc-link-lib=static=RDKit{}_static", lib);
+        if use_conda {
+            println!("cargo:rustc-link-lib=dylib=RDKit{}", lib);
+        } else {
+            println!("cargo:rustc-link-lib=static=RDKit{}_static", lib);
+        }
     }
-    println!("cargo:rustc-link-lib=static=boost_serialization");
+
+    if use_conda {
+        println!("cargo:rustc-link-lib=dylib=boost_serialization");
+    } else {
+        println!("cargo:rustc-link-lib=static=boost_serialization");
+    }
 }
