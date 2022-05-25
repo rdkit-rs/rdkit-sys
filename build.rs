@@ -38,8 +38,6 @@ fn main() {
     let include = format!("{}/include", library_root);
     let rdkit_include = format!("{}/include/rdkit", library_root);
 
-    panic!("{} / {} / {}", brew_lib_path, include, rdkit_include);
-
     let dir = std::fs::read_dir("src/bridge").unwrap();
     let rust_files = dir
         .into_iter()
