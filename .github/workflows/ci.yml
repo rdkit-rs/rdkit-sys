@@ -12,4 +12,4 @@ jobs:
         run: |
           docker build -t conda -f docker/Dockerfile.conda docker/
           docker run --rm conda ldconfig --verbose
-          docker run --rm -v $PWD:/code --workdir=/code -e LD_LIBRARY_PATH=/root/miniconda3/lib conda cargo test --features=dynamic-linking-from-conda
+          docker run --rm -v $PWD:/code --workdir=/code conda cargo test --features=dynamic-linking-from-conda
