@@ -8,8 +8,25 @@ jobs:
       - name: Git checkout
         uses: actions/checkout@v2
 
-      - name: Docker
-        run: |
-          docker build -t conda -f docker/Dockerfile.conda docker/
-          docker run --rm conda ldconfig --verbose
-          docker run --rm -v $PWD:/code --workdir=/code -e LD_LIBRARY_PATH=/usr/local/lib:/root/miniconda3/lib conda cargo test --features=dynamic-linking-from-conda
+#      - name: Docker
+#        run: |
+#          docker build -t conda -f docker/Dockerfile.conda docker/
+#          docker run --rm conda ldconfig --verbose
+#          docker run --rm -v $PWD:/code --workdir=/code -e LD_LIBRARY_PATH=/usr/local/lib:/root/miniconda3/lib conda cargo test --features=dynamic-linking-from-conda
+
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          python-version: 3.7
+
+      - name: Install rdkit
+        run: conda install -c conda-forge rdkit==2022.03.1
+
+      - name: Install stable
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - uses: Swatinem/rust-cache@v1
+
+      - name: Cargo test
+        run: cargo test
