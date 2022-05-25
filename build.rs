@@ -5,7 +5,7 @@ fn main() {
 
     env_logger::init();
 
-    let use_conda = std::env::var("USE_CONDA").is_ok();
+    let use_conda = std::env::var("CARGO_FEATURE_DYNAMIC_LINKING_FROM_CONDA").is_ok();
     let conda = which::which("conda").map(|p| p.to_str().unwrap().to_string());
 
     let library_root = match (
