@@ -1,10 +1,9 @@
 use cxx::let_cxx_string;
-use rdkit_sys::descriptors_ffi::ROMol;
 
 #[test]
 fn test_tautomer_enumerator() {
     let_cxx_string!(smile = "c1ccccc1C(=O)NC");
-    let mol = rdkit_sys::ro_mol_ffi::mol_from_smiles(&smile);
+    let mol = rdkit_sys::ro_mol_ffi::smiles_to_mol(&smile).unwrap();
     let tautomer_enumerator = rdkit_sys::mol_standardize_ffi::tautomer_enumerator();
     let tautomer_enumerator_result =
         rdkit_sys::mol_standardize_ffi::tautomer_enumerate(tautomer_enumerator, mol);
