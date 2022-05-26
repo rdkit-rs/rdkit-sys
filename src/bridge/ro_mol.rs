@@ -8,7 +8,7 @@ pub mod ffi {
 
         pub fn copy_mol(mol: SharedPtr<ROMol>) -> SharedPtr<ROMol>;
 
-        pub fn mol_from_smiles(smi: &CxxString) -> SharedPtr<ROMol>;
+        pub fn smiles_to_mol(smi: &CxxString) -> Result<SharedPtr<ROMol>>;
         pub fn mol_to_smiles(mol: SharedPtr<ROMol>) -> String;
     }
 }

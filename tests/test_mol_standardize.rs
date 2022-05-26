@@ -1,4 +1,5 @@
 use cxx::let_cxx_string;
+use rdkit_sys::descriptors_ffi::ROMol;
 
 #[test]
 fn test_tautomer_enumerator() {
