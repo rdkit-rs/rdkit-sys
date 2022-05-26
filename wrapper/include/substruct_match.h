@@ -1,8 +1,8 @@
 #pragma once
 
 #include "rust/cxx.h"
-#include "GraphMol/GraphMol.h"
-#include "GraphMol/Substruct/SubstructMatch.h"
+#include <GraphMol/GraphMol.h>
+#include <GraphMol/Substruct/SubstructMatch.h>
 
 namespace RDKit {
     std::unique_ptr<std::vector<MatchVectType>> substruct_match(std::shared_ptr<ROMol> mol, std::shared_ptr<ROMol> other_mol, std::shared_ptr<SubstructMatchParameters> params);

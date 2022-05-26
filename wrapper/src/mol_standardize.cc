@@ -1,9 +1,9 @@
 #include <vector>
 
 #include "rust/cxx.h"
-#include "GraphMol/GraphMol.h"
-#include "GraphMol/MolStandardize/Tautomer.h"
-#include "GraphMol/MolStandardize/Charge.h"
+#include <GraphMol/GraphMol.h>
+#include <GraphMol/MolStandardize/Tautomer.h>
+#include <GraphMol/MolStandardize/Charge.h>
 
 namespace RDKit {
     using ROMol = RDKit::ROMol;

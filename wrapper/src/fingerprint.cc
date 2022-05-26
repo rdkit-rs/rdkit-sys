@@ -1,6 +1,6 @@
 #include "rust/cxx.h"
-#include "DataStructs/ExplicitBitVect.h"
-#include "GraphMol/Fingerprints/Fingerprints.h"
+#include <DataStructs/ExplicitBitVect.h>
+#include <GraphMol/Fingerprints/Fingerprints.h>
 
 namespace RDKit {
     std::shared_ptr<ExplicitBitVect> fingerprint_mol(std::shared_ptr<ROMol> mol) {

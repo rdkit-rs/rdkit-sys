@@ -1,10 +1,10 @@
 #include "rust/cxx.h"
-#include "GraphMol/GraphMol.h"
-#include "GraphMol/SmilesParse/SmilesParse.h"
-#include "GraphMol/SmilesParse/SmilesWrite.h"
-#include "DataStructs/ExplicitBitVect.h"
-#include "GraphMol/Fingerprints/Fingerprints.h"
-#include "GraphMol/MolStandardize/Tautomer.h"
+#include <GraphMol/GraphMol.h>
+#include <GraphMol/SmilesParse/SmilesParse.h>
+#include <GraphMol/SmilesParse/SmilesWrite.h>
+#include <DataStructs/ExplicitBitVect.h>
+#include <GraphMol/Fingerprints/Fingerprints.h>
+#include <GraphMol/MolStandardize/Tautomer.h>
 
 namespace RDKit {
     using ExplicitBitVect = ::ExplicitBitVect;
@@ -13,13 +13,8 @@ namespace RDKit {
         return std::shared_ptr<ROMol>(new ROMol(*mol));
     }
 
-    std::shared_ptr<ROMol> mol_from_smiles(const std::string &smiles) {
-        ROMol *mol;
-        try {
-            mol = SmilesToMol(smiles);
-        } catch (const RDKit::AtomValenceException &e) {
-            mol = nullptr;
-        }
+    std::shared_ptr<ROMol> smiles_to_mol(const std::string &smiles) {
+        ROMol *mol = SmilesToMol(smiles);
 
         return std::shared_ptr<ROMol>(mol);
     }

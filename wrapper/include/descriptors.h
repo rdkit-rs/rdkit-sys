@@ -1,7 +1,7 @@
 #pragma once
 
 #include "rust/cxx.h"
-#include "GraphMol/Descriptors/Property.h"
+#include <GraphMol/Descriptors/Property.h>
 
 namespace RDKit {
     using Descriptors::Properties;

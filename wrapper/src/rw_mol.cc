@@ -1,7 +1,7 @@
 #include "rust/cxx.h"
-#include "GraphMol/GraphMol.h"
-#include "RDGeneral/FileParseException.h"
-#include "GraphMol/FileParsers/FileParsers.h"
+#include <GraphMol/GraphMol.h>
+#include <RDGeneral/FileParseException.h>
+#include <GraphMol/FileParsers/FileParsers.h>
 
 namespace RDKit {
     std::shared_ptr<RWMol> rw_mol_from_mol_block(const std::string &mol_block, bool sanitize, bool remove_hs, bool strict_parsing) {

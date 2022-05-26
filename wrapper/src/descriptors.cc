@@ -1,6 +1,6 @@
 #include "rust/cxx.h"
-#include "GraphMol/Descriptors/Property.h"
-#include "GraphMol/ROMol.h"
+#include <GraphMol/Descriptors/Property.h>
+#include <GraphMol/ROMol.h>
 
 
 namespace RDKit {
