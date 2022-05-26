@@ -1,3 +1,10 @@
+0.2.13
+---
+
+ * use mol parsing converts c++ exceptions to `Result`
+ * rewrite RDKit C++ imports to use angle brackets for more natural look
+ * rename smile parsing function
+
 0.2.12
 ---
 
