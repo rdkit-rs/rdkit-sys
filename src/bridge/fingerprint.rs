@@ -18,6 +18,6 @@ pub mod ffi {
 
         pub fn explicit_bit_vect_to_bytes_vec(
             bitvect: SharedPtr<ExplicitBitVect>,
-        ) -> UniquePtr<CxxVector<u8>>;
+        ) -> UniquePtr<CxxVector<u64>>;
     }
 }
