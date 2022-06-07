@@ -12,11 +12,7 @@ pub mod ffi {
             fingerprint: SharedPtr<ExplicitBitVect>,
         ) -> SharedPtr<ExplicitBitVect>;
 
-        pub fn fingerprint_or(left: SharedPtr<ExplicitBitVect>, right: SharedPtr<ExplicitBitVect>);
-        pub fn fingerprint_and(left: SharedPtr<ExplicitBitVect>, right: SharedPtr<ExplicitBitVect>);
-        pub fn get_num_on_bits(bitvect: SharedPtr<ExplicitBitVect>) -> u32;
-
-        pub fn explicit_bit_vect_to_bytes_vec(
+        pub fn explicit_bit_vect_to_u64_vec(
             bitvect: SharedPtr<ExplicitBitVect>,
         ) -> UniquePtr<CxxVector<u64>>;
     }
