@@ -11,7 +11,7 @@ fn main() {
         (_, _, true) => {
             // prefer the prefix env var, if not, fall back to the base from the CLI
             match std::env::var("CONDA_PREFIX") {
-                Ok(prefix) => prefix.to_string(),
+                Ok(prefix) => prefix,
                 Err(_) => {
                     let conda = which::which("conda")
                         .map(|p| p.to_str().unwrap().to_string())
@@ -37,6 +37,13 @@ fn main() {
     let brew_lib_path = format!("{}/lib", library_root);
     let include = format!("{}/include", library_root);
     let rdkit_include = format!("{}/include/rdkit", library_root);
+    let linux_boost_lib_path = format!(
+        "{}/lib/{}-{}-gnu",
+        library_root,
+        std::env::consts::ARCH,
+        std::env::consts::OS
+    );
+    let platform = std::env::consts::OS;
 
     let dir = std::fs::read_dir("src/bridge").unwrap();
     let rust_files = dir
@@ -90,6 +97,8 @@ fn main() {
         .compile("rdkit");
 
     println!("cargo:rustc-link-search=native={}", brew_lib_path);
+    println!("cargo:rustc-link-search=native={}", linux_boost_lib_path);
+
     // println!("cargo:rustc-link-lib=static=c++");
 
     for lib in &[
@@ -97,12 +106,15 @@ fn main() {
         "ChemReactions",
         "ChemTransforms",
         "DataStructs",
+        "Depictor",
         "Descriptors",
         "FileParsers",
         "Fingerprints",
         "GenericGroups",
         "GraphMol",
         "MolStandardize",
+        "MolTransforms",
+        "PartialCharges",
         "RDGeneral",
         "RDGeometryLib",
         "RingDecomposerLib",
@@ -121,5 +133,9 @@ fn main() {
         println!("cargo:rustc-link-lib=dylib=boost_serialization");
     } else {
         println!("cargo:rustc-link-lib=static=boost_serialization");
+    }
+
+    if platform == "linux" {
+        println!("cargo:rustc-link-lib=RDKitcoordgen");
     }
 }
