@@ -1,6 +1,8 @@
 #include "rust/cxx.h"
 #include <GraphMol/Descriptors/Property.h>
 #include <GraphMol/ROMol.h>
+#include <GraphMol/MolOps.h>
+#include <GraphMol/Descriptors/MolDescriptors.h>
 
 
 namespace RDKit {
@@ -20,5 +22,17 @@ namespace RDKit {
         std::vector<double> computed = props->computeProperties(*mol);
         auto computed_heap = new std::vector<double>(computed);
         return std::unique_ptr<std::vector<double>>(computed_heap);
+    }
+
+    rust::String mol_formula(std::shared_ptr<ROMol> mol) {
+        return RDKit::Descriptors::calcMolFormula(*mol);
+    }
+
+    rust::i32 symmetrize_SSSR(std::shared_ptr<ROMol> mol){
+        return RDKit::MolOps::symmetrizeSSSR(*mol);
+    }
+
+    rust::i32 mol_exact_MW(std::shared_ptr<ROMol> mol) {
+        return RDKit::Descriptors::calcExactMW(*mol);
     }
 }
