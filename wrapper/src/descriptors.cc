@@ -28,11 +28,11 @@ namespace RDKit {
         return RDKit::Descriptors::calcMolFormula(*mol);
     }
 
-    rust::i32 symmetrize_SSSR(std::shared_ptr<ROMol> mol){
+    rust::u16 symmetrize_SSSR(std::shared_ptr<ROMol> mol){
         return RDKit::MolOps::symmetrizeSSSR(*mol);
     }
 
-    rust::i32 mol_exact_MW(std::shared_ptr<ROMol> mol) {
+    rust::u32 mol_exact_MW(std::shared_ptr<ROMol> mol) {
         return RDKit::Descriptors::calcExactMW(*mol);
     }
 }

@@ -16,7 +16,7 @@ pub mod ffi {
             mol: SharedPtr<ROMol>,
         ) -> UniquePtr<CxxVector<f64>>;
         pub fn mol_formula(mol: SharedPtr<ROMol>) -> String;
-        pub fn symmetrize_SSSR(mol: SharedPtr<ROMol>) -> i32;
-        pub fn mol_exact_MW(mol: SharedPtr<ROMol>) -> i32;
+        pub fn symmetrize_SSSR(mol: SharedPtr<ROMol>) -> u16;
+        pub fn mol_exact_MW(mol: SharedPtr<ROMol>) -> u32;
     }
 }
