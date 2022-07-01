@@ -1,5 +1,5 @@
 use cxx::{let_cxx_string, SharedPtr};
-use rdkit_sys::{ro_mol_ffi::ROMol, rw_mol_ffi::RWMol};
+use rdkit_sysm::{ro_mol_ffi::ROMol, rw_mol_ffi::RWMol};
 
 #[test]
 fn test_rw_mol_from_mol_block() {
@@ -177,10 +177,10 @@ CC(=O)OC(CC(=O)[O-])C[N+](C)(C)C
 
     let_cxx_string!(mol_block = mol_block);
 
-    let rw_mol = rdkit_sys::rw_mol_ffi::rw_mol_from_mol_block(&mol_block, false, false, false);
+    let rw_mol = rdkit_sysm::rw_mol_ffi::rw_mol_from_mol_block(&mol_block, false, false, false);
     let ro_mol = unsafe { std::mem::transmute::<SharedPtr<RWMol>, SharedPtr<ROMol>>(rw_mol) };
 
-    let smiles = rdkit_sys::ro_mol_ffi::mol_to_smiles(ro_mol);
+    let smiles = rdkit_sysm::ro_mol_ffi::mol_to_smiles(ro_mol);
     assert_eq!("[H]C([H])([H])C(=O)OC([H])(C([H])([H])C(=O)[O-])C([H])([H])[N+](C([H])([H])[H])(C([H])([H])[H])C([H])([H])[H]", &smiles);
 }
 
@@ -305,9 +305,9 @@ $"#;
     let_cxx_string!(bad = bad);
 
     let mol = {
-        let mut mol = rdkit_sys::rw_mol_ffi::rw_mol_from_mol_block(&bad, true, false, false);
+        let mut mol = rdkit_sysm::rw_mol_ffi::rw_mol_from_mol_block(&bad, true, false, false);
         if mol.is_null() {
-            mol = rdkit_sys::rw_mol_ffi::rw_mol_from_mol_block(&bad, false, false, false);
+            mol = rdkit_sysm::rw_mol_ffi::rw_mol_from_mol_block(&bad, false, false, false);
         }
         mol
     };

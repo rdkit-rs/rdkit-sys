@@ -1,3 +1,5 @@
+use std::path::Path;
+
 fn main() {
     if std::env::var("DOCS_RS").is_ok() {
         return;
@@ -27,7 +29,7 @@ fn main() {
         }
         ("macos", "x86_64", _) => "/usr/local".to_string(),
         ("macos", "aarch64", _) => "/opt/homebrew".to_string(),
-        ("linux", _, _) => "/usr".to_string(),
+        ("linux", _, _) => "/usr/local".to_string(),
         (unsupported_os, unsupported_arch, use_conda) => panic!(
             "sorry, rdkit-sys doesn't support {}/{}/use_conda={} at this time",
             unsupported_os, unsupported_arch, use_conda
@@ -93,22 +95,63 @@ fn main() {
     // println!("cargo:rustc-link-lib=static=c++");
 
     for lib in &[
+        "Abbreviations",
+        "Alignment",
         "Catalogs",
+        "ChemicalFeatures",
         "ChemReactions",
         "ChemTransforms",
+        "CIPLabeler",
+        "coordgen",
         "DataStructs",
+        "Depictor",
+        "Deprotect",
         "Descriptors",
+        "DistGeometry",
+        "DistGeomHelpers",
+        "EigenSolvers",
         "FileParsers",
+        "FilterCatalog",
         "Fingerprints",
+        "FMCS",
+        "ForceFieldHelpers",
+        "ForceField",
+        "FragCatalog",
+        "ga",
         "GenericGroups",
         "GraphMol",
+        "hc",
+        "InfoTheory",
+        "maeparser",
+        "MMPA",
+        "MolAlign",
+        "MolCatalog",
+        "MolChemicalFeatures",
+        "MolDraw2D",
+        "MolEnumerator",
+        "MolHash",
+        "MolInterchange",
         "MolStandardize",
+        "MolTransforms",
+        "O3AAlign",
+        "Optimizer",
+        "PartialCharges",
         "RDGeneral",
         "RDGeometryLib",
+        "RDStreams",
+        "ReducedGraphs",
+        "RGroupDecomposition",
         "RingDecomposerLib",
+        "ScaffoldNetwork",
+        "ShapeHelpers",
+        "SimDivPickers",
+        "SLNParse",
         "SmilesParse",
         "Subgraphs",
+        "SubstructLibrary",
         "SubstructMatch",
+        "TautomerQuery",
+        "Trajectory",
     ] {
         if use_conda {
             println!("cargo:rustc-link-lib=dylib=RDKit{}", lib);
@@ -120,6 +163,15 @@ fn main() {
     if use_conda {
         println!("cargo:rustc-link-lib=dylib=boost_serialization");
     } else {
-        println!("cargo:rustc-link-lib=static=boost_serialization");
+        let dir = std::env::var("CARGO_MANIFEST_DIR").unwrap();
+        println!(
+            "cargo:rustc-link-search=native={}",
+            Path::new(&dir).join("lib").display()
+        );
+        println!(
+            "cargo:rustc-link-search=native={}",
+            "/usr/local/include/rdkit"
+        );
+        println!("cargo:rustc-link-search=native={}", "/usr/local/include");
     }
 }

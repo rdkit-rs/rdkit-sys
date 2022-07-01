@@ -1,21 +1,20 @@
 [package]
-name = "rdkit-sys"
-authors = ["Xavier Lange (xrlange@gmail.com)", "chrissly31415"]
-version = "0.2.16"
+name = "rdkit-sysm"
+authors = ["jiuxie@outlook.com"]
+version = "0.1.4"
 edition = "2021"
 license = "MIT"
-description = "RDKit CFFI library builder and bindings"
-repository = "https://github.com/tureus/rdkit-sys"
+description = "RDKit CFFI library builder and bindings, forked rdkit-sys"
 exclude = ["rdkit-*", "*.tar.gz", "examples/"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-cxx = "1.0.66"
+cxx = "1.0.69"
 
 [build-dependencies]
 env_logger = "0.9.0"
-cxx-build = "1.0.67"
+cxx-build = "1.0.69"
 which = "4.2.5"
 
 [features]

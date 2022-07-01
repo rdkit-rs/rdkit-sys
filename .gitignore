@@ -5,3 +5,4 @@ rdkit-sys.iml
 *.tar.gz
 rdkit-*/
 .DS_Store
+./vscode

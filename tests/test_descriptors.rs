@@ -3,16 +3,16 @@ use cxx::let_cxx_string;
 #[test]
 fn test_descriptors() {
     let_cxx_string!(smile = "c1ccccc1C(=O)NC");
-    let mol = rdkit_sys::ro_mol_ffi::smiles_to_mol(&smile).unwrap();
+    let mol = rdkit_sysm::ro_mol_ffi::smiles_to_mol(&smile).unwrap();
 
-    let properties = rdkit_sys::descriptors_ffi::new_properties();
+    let properties = rdkit_sysm::descriptors_ffi::new_properties();
 
-    let names = rdkit_sys::descriptors_ffi::get_property_names(properties.clone());
+    let names = rdkit_sysm::descriptors_ffi::get_property_names(properties.clone());
     let names = names
         .into_iter()
         .map(|stringy| stringy.to_string())
         .collect::<Vec<_>>();
-    let computed = rdkit_sys::descriptors_ffi::compute_properties(properties, mol);
+    let computed = rdkit_sysm::descriptors_ffi::compute_properties(properties, mol);
     let computed = computed
         .into_iter()
         .map(|floaty| *floaty)
@@ -111,4 +111,28 @@ fn test_descriptors() {
 
     assert_eq!(names, expected_names);
     assert_eq!(computed, expected_computed);
+}
+
+#[test]
+fn test_mol_sssr() {
+    cxx::let_cxx_string!(smile = "c1ccccc1CCCCCCCC");
+    let romol = rdkit_sysm::ro_mol_ffi::smiles_to_mol(&smile).unwrap();
+    let sssr = rdkit_sysm::descriptors_ffi::symmetrize_SSSR(romol);
+    assert_eq!(1, sssr);
+}
+
+#[test]
+fn test_mol_formula() {
+    cxx::let_cxx_string!(smile = "c1ccccc1CCCCCCCC");
+    let romol = rdkit_sysm::ro_mol_ffi::smiles_to_mol(&smile).unwrap();
+    let formula = rdkit_sysm::descriptors_ffi::mol_formula(romol);
+    assert_eq!("C14H22", formula);
+}
+
+#[test]
+fn test_mol_wt() {
+    cxx::let_cxx_string!(smile = "c1ccccc1CCCCCCCC");
+    let romol = rdkit_sysm::ro_mol_ffi::smiles_to_mol(&smile).unwrap();
+    let wt = rdkit_sysm::descriptors_ffi::mol_exact_MW(romol);
+    assert_eq!(190, wt);
 }
