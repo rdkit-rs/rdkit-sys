@@ -113,18 +113,16 @@ fn test_descriptors() {
     assert_eq!(computed, expected_computed);
 }
 
-
 #[test]
-fn test_mol_sssr(){
+fn test_mol_sssr() {
     cxx::let_cxx_string!(smile = "c1ccccc1CCCCCCCC");
     let romol = rdkit_sysm::ro_mol_ffi::smiles_to_mol(&smile).unwrap();
     let sssr = rdkit_sysm::descriptors_ffi::symmetrize_SSSR(romol);
     assert_eq!(1, sssr);
 }
 
-
 #[test]
-fn test_mol_formula(){
+fn test_mol_formula() {
     cxx::let_cxx_string!(smile = "c1ccccc1CCCCCCCC");
     let romol = rdkit_sysm::ro_mol_ffi::smiles_to_mol(&smile).unwrap();
     let formula = rdkit_sysm::descriptors_ffi::mol_formula(romol);
@@ -132,7 +130,7 @@ fn test_mol_formula(){
 }
 
 #[test]
-fn test_mol_wt(){
+fn test_mol_wt() {
     cxx::let_cxx_string!(smile = "c1ccccc1CCCCCCCC");
     let romol = rdkit_sysm::ro_mol_ffi::smiles_to_mol(&smile).unwrap();
     let wt = rdkit_sysm::descriptors_ffi::mol_exact_MW(romol);
