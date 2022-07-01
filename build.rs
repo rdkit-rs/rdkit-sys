@@ -29,7 +29,7 @@ fn main() {
         }
         ("macos", "x86_64", _) => "/usr/local".to_string(),
         ("macos", "aarch64", _) => "/opt/homebrew".to_string(),
-        ("linux", _, _) => "/usr".to_string(),
+        ("linux", _, _) => "/usr/lcoal".to_string(),
         (unsupported_os, unsupported_arch, use_conda) => panic!(
             "sorry, rdkit-sys doesn't support {}/{}/use_conda={} at this time",
             unsupported_os, unsupported_arch, use_conda
