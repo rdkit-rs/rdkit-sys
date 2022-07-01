@@ -29,7 +29,7 @@ fn main() {
         }
         ("macos", "x86_64", _) => "/usr/local".to_string(),
         ("macos", "aarch64", _) => "/opt/homebrew".to_string(),
-        ("linux", _, _) => "/usr/lcoal".to_string(),
+        ("linux", _, _) => "/usr/local".to_string(),
         (unsupported_os, unsupported_arch, use_conda) => panic!(
             "sorry, rdkit-sys doesn't support {}/{}/use_conda={} at this time",
             unsupported_os, unsupported_arch, use_conda
@@ -124,5 +124,7 @@ fn main() {
     } else {
         let dir = std::env::var("CARGO_MANIFEST_DIR").unwrap();
         println!("cargo:rustc-link-search=native={}", Path::new(&dir).join("lib").display());
+        println!("cargo:rustc-link-search=native={}", "/usr/local/include/rdkit");
+        println!("cargo:rustc-link-search=native={}", "/usr/local/include");
     }
 }
