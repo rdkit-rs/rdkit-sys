@@ -112,3 +112,27 @@ fn test_descriptors() {
     assert_eq!(names, expected_names);
     assert_eq!(computed, expected_computed);
 }
+
+#[test]
+fn test_mol_sssr() {
+    cxx::let_cxx_string!(smile = "c1ccccc1CCCCCCCC");
+    let romol = rdkit_sys::ro_mol_ffi::smiles_to_mol(&smile).unwrap();
+    let sssr = rdkit_sys::descriptors_ffi::symmetrize_sssr(romol);
+    assert_eq!(1, sssr);
+}
+
+#[test]
+fn test_calc_mol_formula() {
+    cxx::let_cxx_string!(smile = "c1ccccc1CCCCCCCC");
+    let romol = rdkit_sys::ro_mol_ffi::smiles_to_mol(&smile).unwrap();
+    let formula = rdkit_sys::descriptors_ffi::calc_mol_formula(romol);
+    assert_eq!("C14H22", formula);
+}
+
+#[test]
+fn test_mol_wt() {
+    cxx::let_cxx_string!(smile = "c1ccccc1CCCCCCCC");
+    let romol = rdkit_sys::ro_mol_ffi::smiles_to_mol(&smile).unwrap();
+    let wt = rdkit_sys::descriptors_ffi::mol_exact_mw(romol);
+    assert_eq!(190, wt);
+}
