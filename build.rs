@@ -1,3 +1,5 @@
+const CPP_VERSION_FLAG: &'static str = "-std=c++17";
+
 fn main() {
     if std::env::var("DOCS_RS").is_ok() {
         return;
@@ -90,7 +92,7 @@ fn main() {
         .include(include)
         .include(rdkit_include)
         .include(std::env::var("CARGO_MANIFEST_DIR").unwrap())
-        .flag("-std=c++14")
+        .flag(CPP_VERSION_FLAG)
         .warnings(false)
         // rdkit has warnings that blow up our build. we could enumerate all those warnings and tell
         // the compiler to allow them... .warnings_into_errors(true)
