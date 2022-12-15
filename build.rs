@@ -33,6 +33,7 @@ fn main() {
 
                     lib_paths.push(format!("{}/lib", conda_root));
                     include_paths.push(format!("{}/include", conda_root));
+                    include_paths.push(format!("{}/include/rdkit", conda_root));
                 }
             }
         }
