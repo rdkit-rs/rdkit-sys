@@ -9,11 +9,17 @@ fn main() {
 
     let use_conda = std::env::var("CARGO_FEATURE_DYNAMIC_LINKING_FROM_CONDA").is_ok();
 
-    let library_root = match (std::env::consts::OS, std::env::consts::ARCH, use_conda) {
+    let mut lib_paths = vec![];
+    let mut include_paths = vec![];
+
+    match (std::env::consts::OS, std::env::consts::ARCH, use_conda) {
         (_, _, true) => {
             // prefer the prefix env var, if not, fall back to the base from the CLI
             match std::env::var("CONDA_PREFIX") {
-                Ok(prefix) => prefix.to_string(),
+                Ok(prefix) => {
+                    include_paths.push(format!("{prefix}/include"));
+                    lib_paths.push(format!("{prefix}/lib"));
+                }
                 Err(_) => {
                     let conda = which::which("conda")
                         .map(|p| p.to_str().unwrap().to_string())
@@ -23,22 +29,37 @@ fn main() {
 
                     let output = conda.output().unwrap();
                     let stdout = String::from_utf8(output.stdout).unwrap();
-                    stdout.trim().to_string()
+                    let conda_root = stdout.trim().to_string();
+
+                    lib_paths.push(format!("{}/lib", conda_root));
+                    include_paths.push(format!("{}/include", conda_root));
                 }
             }
         }
-        ("macos", "x86_64", _) => "/usr/local".to_string(),
-        ("macos", "aarch64", _) => "/opt/homebrew".to_string(),
-        ("linux", _, _) => "/usr/local".to_string(),
+        ("macos", "x86_64", _) => {
+            include_paths.push("/usr/local/include".to_string());
+            include_paths.push("/usr/local/include/rdkit".to_string());
+            lib_paths.push("/usr/local/lib".to_string());
+        }
+        ("macos", "aarch64", _) => {
+            include_paths.push("/opt/homebrew/include".to_string());
+            include_paths.push("/opt/homebrew/include/rdkit".to_string());
+            lib_paths.push("/opt/homebrew/lib".to_string())
+        }
+        ("linux", _, _) => {
+            lib_paths.push("/usr/local/lib".to_string());
+            lib_paths.push("/usr/lib".to_string());
+
+            include_paths.push("/usr/local/include".to_string());
+            include_paths.push("/usr/local/include/rdkit".to_string());
+            include_paths.push("/usr/include".to_string());
+            include_paths.push("/usr/include/rdkit".to_string());
+        }
         (unsupported_os, unsupported_arch, use_conda) => panic!(
             "sorry, rdkit-sys doesn't support {}/{}/use_conda={} at this time",
             unsupported_os, unsupported_arch, use_conda
         ),
     };
-
-    let brew_lib_path = format!("{}/lib", library_root);
-    let include = format!("{}/include", library_root);
-    let rdkit_include = format!("{}/include/rdkit", library_root);
 
     let dir = std::fs::read_dir("src/bridge").unwrap();
     let rust_files = dir
@@ -56,7 +77,7 @@ fn main() {
         .filter(|p| !p.ends_with("mod.rs"))
         .collect::<Vec<_>>();
 
-    let mut cc_paths = vec![];
+    let mut wrapper_cc_paths = vec![];
 
     let wrapper_root = std::path::PathBuf::from("wrapper");
     for file in &rust_files {
@@ -69,7 +90,7 @@ fn main() {
         if !meta.is_file() {
             panic!("{} must exist", cc_path.display())
         }
-        cc_paths.push(cc_path);
+        wrapper_cc_paths.push(cc_path);
 
         let h_path = wrapper_root
             .join("include")
@@ -81,9 +102,8 @@ fn main() {
     }
 
     cxx_build::bridges(rust_files)
-        .files(cc_paths)
-        .include(include)
-        .include(rdkit_include)
+        .files(wrapper_cc_paths)
+        .includes(include_paths.iter())
         .include(std::env::var("CARGO_MANIFEST_DIR").unwrap())
         .flag(CPP_VERSION_FLAG)
         .warnings(false)
@@ -91,7 +111,9 @@ fn main() {
         // the compiler to allow them... .warnings_into_errors(true)
         .compile("rdkit");
 
-    println!("cargo:rustc-link-search=native={}", brew_lib_path);
+    for path in lib_paths {
+        println!("cargo:rustc-link-search=native={}", path);
+    }
     // println!("cargo:rustc-link-lib=static=c++");
 
     for lib in &[
