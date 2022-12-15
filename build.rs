@@ -18,6 +18,7 @@ fn main() {
             match std::env::var("CONDA_PREFIX") {
                 Ok(prefix) => {
                     include_paths.push(format!("{prefix}/include"));
+                    include_paths.push(format!("{prefix}/include/rdkit"));
                     lib_paths.push(format!("{prefix}/lib"));
                 }
                 Err(_) => {
