@@ -51,6 +51,10 @@ fn main() {
         ("linux", _, _) => {
             lib_paths.push("/usr/local/lib".to_string());
             lib_paths.push("/usr/lib".to_string());
+            // Ubuntu specific hack: boost doesn't have pkg-config and its libs got put in
+            // this weird directory
+            lib_paths.push("/usr/lib/aarch64-linux-gnu".to_string());
+            lib_paths.push("/usr/lib/x86_64-linux-gnu".to_string());
 
             include_paths.push("/usr/local/include".to_string());
             include_paths.push("/usr/local/include/rdkit".to_string());
