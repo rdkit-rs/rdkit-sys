@@ -109,7 +109,7 @@ fn main() {
 
     cxx_build::bridges(rust_files)
         .files(wrapper_cc_paths)
-        .includes(include_paths.iter())
+        .includes(include_paths)
         .include(std::env::var("CARGO_MANIFEST_DIR").unwrap())
         .flag(CPP_VERSION_FLAG)
         .warnings(false)
