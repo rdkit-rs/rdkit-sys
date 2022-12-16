@@ -1,8 +1,8 @@
 #[test]
 fn test_ro_mol() {
     cxx::let_cxx_string!(smile = "c1ccccc1CCCCCCCC");
-    let romol = rdkit_sys::ro_mol_ffi::smiles_to_mol(&smile);
-    assert!(romol.is_ok());
+    let romol = rdkit_sys::ro_mol_ffi::smiles_to_mol(&smile).unwrap();
+    assert!(!romol.is_null());
 }
 
 #[test]
