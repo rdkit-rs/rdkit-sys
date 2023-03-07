@@ -1,3 +1,8 @@
+0.3.0
+---
+
+ * Remove all static references from build.rs, the debian packages just won't support it
+
 0.2.13
 ---
 
