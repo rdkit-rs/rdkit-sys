@@ -28,7 +28,7 @@ jobs:
           use-only-tar-bz2: true # IMPORTANT: This needs to be set for caching to work properly!
 
       - name: Install rdkit
-        run: conda install -c conda-forge rdkit==2022.03.1
+        run: conda install -c conda-forge rdkit==2022.09.3
 
       - name: Install stable
         uses: actions-rs/toolchain@v1

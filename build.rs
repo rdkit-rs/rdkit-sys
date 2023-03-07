@@ -41,7 +41,6 @@ fn main() {
         ("macos", "x86_64", _) => {
             include_paths.push("/usr/local/include".to_string());
             include_paths.push("/usr/local/include/rdkit".to_string());
-            lib_paths.push("/usr/local/lib".to_string());
         }
         ("macos", "aarch64", _) => {
             include_paths.push("/opt/homebrew/include".to_string());
@@ -49,13 +48,6 @@ fn main() {
             lib_paths.push("/opt/homebrew/lib".to_string())
         }
         ("linux", _, _) => {
-            lib_paths.push("/usr/local/lib".to_string());
-            lib_paths.push("/usr/lib".to_string());
-            // Ubuntu specific hack: boost doesn't have pkg-config and its libs got put in
-            // this weird directory
-            lib_paths.push("/usr/lib/aarch64-linux-gnu".to_string());
-            lib_paths.push("/usr/lib/x86_64-linux-gnu".to_string());
-
             include_paths.push("/usr/local/include".to_string());
             include_paths.push("/usr/local/include/rdkit".to_string());
             include_paths.push("/usr/include".to_string());
@@ -123,37 +115,28 @@ fn main() {
     // println!("cargo:rustc-link-lib=static=c++");
 
     for lib in &[
-        "Catalogs",
-        "ChemReactions",
-        "ChemTransforms",
-        "coordgen",
-        "DataStructs",
-        "Depictor",
+        // "Catalogs",
+        // "ChemReactions",
+        // "ChemTransforms",
+        // "DataStructs",
+        // "Depictor",
         "Descriptors",
         "FileParsers",
         "Fingerprints",
-        "GenericGroups",
+        // "GenericGroups",
         "GraphMol",
         "MolStandardize",
-        "MolTransforms",
-        "PartialCharges",
+        // "MolTransforms",
+        // "PartialCharges",
         "RDGeneral",
-        "RDGeometryLib",
-        "RingDecomposerLib",
+        // "RDGeometryLib",
+        // "RingDecomposerLib",
         "SmilesParse",
-        "Subgraphs",
+        // "Subgraphs",
         "SubstructMatch",
     ] {
-        if use_conda {
-            println!("cargo:rustc-link-lib=dylib=RDKit{}", lib);
-        } else {
-            println!("cargo:rustc-link-lib=static=RDKit{}_static", lib);
-        }
+        println!("cargo:rustc-link-lib=dylib=RDKit{}", lib);
     }
 
-    if use_conda {
-        println!("cargo:rustc-link-lib=dylib=boost_serialization");
-    } else {
-        println!("cargo:rustc-link-lib=static=boost_serialization");
-    }
+    println!("cargo:rustc-link-lib=dylib=boost_serialization");
 }
