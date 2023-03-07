@@ -118,7 +118,7 @@ fn main() {
         // "Catalogs",
         // "ChemReactions",
         // "ChemTransforms",
-        // "DataStructs",
+        "DataStructs",
         // "Depictor",
         "Descriptors",
         "FileParsers",
