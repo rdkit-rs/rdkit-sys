@@ -134,6 +134,7 @@ fn main() {
         "SmilesParse",
         // "Subgraphs",
         "SubstructMatch",
+        "RDInchiLib",
     ] {
         println!("cargo:rustc-link-lib=dylib=RDKit{}", lib);
     }
