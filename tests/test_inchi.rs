@@ -25,3 +25,20 @@ fn test_bad_inchi_to_mol() {
     assert!(romol.is_ok());
     assert!(romol.unwrap().is_null());
 }
+
+#[test]
+#[cfg(feature = "inchi")]
+fn test_good_inchi_to_inchi_key() {
+    cxx::let_cxx_string!(inchi = "InChI=1S/CH4/h1H4");
+    let inchi_key = rdkit_sys::inchi_ffi::inchi_to_inchi_key(&inchi).unwrap();
+    assert_eq!(inchi_key, "VNWKTOKETHGBQD-UHFFFAOYSA-N");
+}
+
+#[test]
+#[cfg(feature = "inchi")]
+fn test_bad_inchi_to_inchi_key() {
+    cxx::let_cxx_string!(bad_inchi = "asd");
+    let inchi_key = rdkit_sys::inchi_ffi::inchi_to_inchi_key(&bad_inchi);
+    assert!(inchi_key.is_ok());
+    assert!(inchi_key.unwrap().is_empty());
+}

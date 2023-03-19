@@ -12,4 +12,8 @@ namespace RDKit {
         ROMol *mol = InchiToMol(inchi, rv);
         return std::shared_ptr<ROMol>(mol);
     }
+
+    rust::String inchi_to_inchi_key(const std::string &inchi) {
+        return InchiToInchiKey(inchi);
+    }
 }

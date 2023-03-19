@@ -8,5 +8,7 @@ pub mod ffi {
 
         pub fn mol_to_inchi(mol: SharedPtr<ROMol>) -> String;
         pub fn inchi_to_mol(inchi: &CxxString) -> Result<SharedPtr<ROMol>>;
+
+        pub fn inchi_to_inchi_key(inchi: &CxxString) -> Result<String>;
     }
 }
