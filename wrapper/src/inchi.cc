@@ -1,11 +1,4 @@
 #include "rust/cxx.h"
-#include <GraphMol/GraphMol.h>
-#include <GraphMol/SmilesParse/SmilesParse.h>
-#include <GraphMol/SmilesParse/SmilesWrite.h>
-#include <DataStructs/ExplicitBitVect.h>
-#include <GraphMol/Fingerprints/Fingerprints.h>
-#include <GraphMol/MolStandardize/Tautomer.h>
-#include <GraphMol/MolOps.h>
 #include <GraphMol/inchi.h>
 
 namespace RDKit {
