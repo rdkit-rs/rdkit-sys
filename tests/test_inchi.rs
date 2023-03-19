@@ -1,4 +1,5 @@
 #[test]
+#[cfg(feature = "inchi")]
 fn test_mol_to_inchi() {
     cxx::let_cxx_string!(smile = "C");
     let romol = rdkit_sys::ro_mol_ffi::smiles_to_mol(&smile).unwrap();
@@ -7,6 +8,7 @@ fn test_mol_to_inchi() {
 }
 
 #[test]
+#[cfg(feature = "inchi")]
 fn test_good_inchi_to_mol() {
     cxx::let_cxx_string!(inchi = "InChI=1S/C2H6/c1-2/h1-2H3");
     let romol = rdkit_sys::inchi_ffi::inchi_to_mol(&inchi).unwrap();
@@ -16,6 +18,7 @@ fn test_good_inchi_to_mol() {
 }
 
 #[test]
+#[cfg(feature = "inchi")]
 fn test_bad_inchi_to_mol() {
     cxx::let_cxx_string!(bad_inchi = "asd");
     let romol = rdkit_sys::inchi_ffi::inchi_to_mol(&bad_inchi);

@@ -21,3 +21,4 @@ which = "4.2.5"
 [features]
 default = []
 dynamic-linking-from-conda = []
+inchi = []
