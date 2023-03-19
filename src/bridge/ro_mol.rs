@@ -23,9 +23,6 @@ pub mod ffi {
 
         pub fn mol_to_smiles(mol: SharedPtr<ROMol>) -> String;
 
-        pub fn mol_to_inchi(mol: SharedPtr<ROMol>) -> String;
-        pub fn inchi_to_mol(inchi: &CxxString) -> Result<SharedPtr<ROMol>>;
-
         // 0b11111111
         pub type MolSanitizeException;
         pub fn detect_chemistry_problems(mol: SharedPtr<ROMol>) -> UniquePtr<CxxVector<CxxString>>;

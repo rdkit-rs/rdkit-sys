@@ -18,7 +18,4 @@ namespace RDKit {
     void smiles_parser_params_set_sanitize(std::shared_ptr<SmilesParserParams> params, bool sanitize);
 
     std::unique_ptr<std::vector<std::string>> detect_chemistry_problems(std::shared_ptr<ROMol> mol);
-
-    rust::String mol_to_inchi(std::shared_ptr<ROMol> mol);
-    std::shared_ptr<ROMol> inchi_to_mol(const std::string &inchi);
 }
