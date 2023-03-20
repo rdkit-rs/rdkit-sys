@@ -4,6 +4,11 @@ pub use descriptors::ffi as descriptors_ffi;
 mod fingerprint;
 pub use fingerprint::ffi as fingerprint_ffi;
 
+#[cfg(feature = "inchi")]
+mod inchi;
+#[cfg(feature = "inchi")]
+pub use inchi::ffi as inchi_ffi;
+
 mod mol_standardize;
 pub use mol_standardize::ffi as mol_standardize_ffi;
 

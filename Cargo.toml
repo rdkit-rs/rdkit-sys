@@ -1,6 +1,6 @@
 [package]
 name = "rdkit-sys"
-authors = ["Xavier Lange (xrlange@gmail.com)", "chrissly31415"]
+authors = ["Xavier Lange (xrlange@gmail.com)", "chrissly31415", "Benjamin Smith"]
 version = "0.3.0"
 edition = "2021"
 license = "MIT"
@@ -21,3 +21,4 @@ which = "4.2.5"
 [features]
 default = []
 dynamic-linking-from-conda = []
+inchi = []
