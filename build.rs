@@ -134,9 +134,12 @@ fn main() {
         "SmilesParse",
         // "Subgraphs",
         "SubstructMatch",
-        "RDInchiLib",
     ] {
         println!("cargo:rustc-link-lib=dylib=RDKit{}", lib);
+    }
+
+    if cfg!(feature = "inchi") {
+        println!("cargo:rustc-link-lib=dylib=RDKitRDInchiLib");
     }
 
     println!("cargo:rustc-link-lib=dylib=boost_serialization");
