@@ -30,5 +30,8 @@ pub mod ffi {
         pub fn flatten_keep_largest(params: SharedPtr<ScaffoldNetworkParams>, input: bool);
         pub fn collect_mol_counts(params: SharedPtr<ScaffoldNetworkParams>, input: bool);
 
+        pub type ScaffoldNetworkClass;
+        pub fn default_scaffold_network() -> SharedPtr<ScaffoldNetworkClass>;
+
     }
 }

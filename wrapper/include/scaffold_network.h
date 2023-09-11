@@ -10,14 +10,18 @@ namespace RDKit {
   std::shared_ptr<ScaffoldNetworkParams> default_scaffold_network_params();
   std::shared_ptr<ScaffoldNetworkParams> new_scaffold_network_params(const rust::Vec<rust::String> bondBreakersSmarts);
 
-  set_include_generic_scaffolds(std::shared_ptr<ScaffoldNetworkParams> params, bool input);
-  include_genericbond_scaffolds(std::shared_ptr<ScaffoldNetworkParams> params, bool input);
-  include_scaffolds_without_attachments(std::shared_ptr<ScaffoldNetworkParams> params, bool input);
-  include_scaffolds_with_attachments(std::shared_ptr<ScaffoldNetworkParams> params, bool input);
-  keep_only_first_fragment(std::shared_ptr<ScaffoldNetworkParams> params, bool input);
-  prune_before_fragmenting(std::shared_ptr<ScaffoldNetworkParams> params, bool input);
-  flatten_isotopes(std::shared_ptr<ScaffoldNetworkParams> params, bool input);
-  flatten_chirality(std::shared_ptr<ScaffoldNetworkParams> params, bool input);
-  flatten_keep_largest(std::shared_ptr<ScaffoldNetworkParams> params, bool input);
-  collect_mol_counts(std::shared_ptr<ScaffoldNetworkParams> params, bool input);
+  void set_include_generic_scaffolds(std::shared_ptr<ScaffoldNetworkParams> params, bool input);
+  void include_genericbond_scaffolds(std::shared_ptr<ScaffoldNetworkParams> params, bool input);
+  void include_scaffolds_without_attachments(std::shared_ptr<ScaffoldNetworkParams> params, bool input);
+  void include_scaffolds_with_attachments(std::shared_ptr<ScaffoldNetworkParams> params, bool input);
+  void keep_only_first_fragment(std::shared_ptr<ScaffoldNetworkParams> params, bool input);
+  void prune_before_fragmenting(std::shared_ptr<ScaffoldNetworkParams> params, bool input);
+  void flatten_isotopes(std::shared_ptr<ScaffoldNetworkParams> params, bool input);
+  void flatten_chirality(std::shared_ptr<ScaffoldNetworkParams> params, bool input);
+  void flatten_keep_largest(std::shared_ptr<ScaffoldNetworkParams> params, bool input);
+  void collect_mol_counts(std::shared_ptr<ScaffoldNetworkParams> params, bool input);
+
+  using ScaffoldNetworkClass = ScaffoldNetwork::ScaffoldNetwork;
+
+  std::shared_ptr<ScaffoldNetworkClass> default_scaffold_network();
 }

@@ -21,44 +21,51 @@ namespace RDKit {
     return std::shared_ptr<ScaffoldNetworkParams>(network_params);
   }
 
-  set_include_generic_scaffolds(std::shared_ptr<ScaffoldNetworkParams> params, bool input) {
-    params.includeGenericScaffolds = input;
+  void set_include_generic_scaffolds(std::shared_ptr<ScaffoldNetworkParams> params, bool input) {
+    params->includeGenericScaffolds = input;
   }
 
-  include_generic_bond_scaffolds(std::shared_ptr<ScaffoldNetworkParams> params, bool input) {
-    params.includeGenericBondScaffolds = input;
+  void include_generic_bond_scaffolds(std::shared_ptr<ScaffoldNetworkParams> params, bool input) {
+    params->includeGenericBondScaffolds = input;
   }
 
-  include_scaffolds_without_attachments(std::shared_ptr<ScaffoldNetworkParams> params, bool input) {
-    params.includeScaffoldsWithoutAttachments = input;
+  void include_scaffolds_without_attachments(std::shared_ptr<ScaffoldNetworkParams> params, bool input) {
+    params->includeScaffoldsWithoutAttachments = input;
   }
 
-  include_scaffolds_with_attachments(std::shared_ptr<ScaffoldNetworkParams> params, bool input) {
-    params.includeScaffoldsWithAttachments = input;
+  void include_scaffolds_with_attachments(std::shared_ptr<ScaffoldNetworkParams> params, bool input) {
+    params->includeScaffoldsWithAttachments = input;
   }
 
-  keep_only_first_fragment(std::shared_ptr<ScaffoldNetworkParams> params, bool input) {
-    params.keepOnlyFirstFragment = input;
+  void keep_only_first_fragment(std::shared_ptr<ScaffoldNetworkParams> params, bool input) {
+    params->keepOnlyFirstFragment = input;
   }
 
-  prune_before_fragmenting(std::shared_ptr<ScaffoldNetworkParams> params, bool input) {
-    params.pruneBeforeFragmenting = input;
+  void prune_before_fragmenting(std::shared_ptr<ScaffoldNetworkParams> params, bool input) {
+    params->pruneBeforeFragmenting = input;
   }
 
-  flatten_isotopes(std::shared_ptr<ScaffoldNetworkParams> params, bool input) {
-    params.flattenIsotopes = input;
+  void flatten_isotopes(std::shared_ptr<ScaffoldNetworkParams> params, bool input) {
+    params->flattenIsotopes = input;
   }
 
-  flatten_chirality(std::shared_ptr<ScaffoldNetworkParams> params, bool input) {
-    params.flattenChirality = input;
+  void flatten_chirality(std::shared_ptr<ScaffoldNetworkParams> params, bool input) {
+    params->flattenChirality = input;
   }
 
-  flatten_keep_largest(std::shared_ptr<ScaffoldNetworkParams> params, bool input) {
-    params.flattenKeepLargest = input;
+  void flatten_keep_largest(std::shared_ptr<ScaffoldNetworkParams> params, bool input) {
+    params->flattenKeepLargest = input;
   }
 
-  collect_mol_counts(std::shared_ptr<ScaffoldNetworkParams> params, bool input) {
-    params.collectMolCounts = input;
+  void collect_mol_counts(std::shared_ptr<ScaffoldNetworkParams> params, bool input) {
+    params->collectMolCounts = input;
+  }
+
+  using ScaffoldNetworkClass = ScaffoldNetwork::ScaffoldNetwork;
+
+  std::shared_ptr<ScaffoldNetworkClass> default_scaffold_network() {
+    ScaffoldNetworkClass *scaffold_network = new ScaffoldNetworkClass();
+    return std::shared_ptr<ScaffoldNetworkClass>(scaffold_network);
   }
 
 }
