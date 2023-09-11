@@ -13,5 +13,8 @@ pub use ro_mol::ffi as ro_mol_ffi;
 mod rw_mol;
 pub use rw_mol::ffi as rw_mol_ffi;
 
+mod scaffold_network;
+pub use scaffold_network::ffi as scaffold_network_ffi;
+
 mod substruct_match;
 pub use substruct_match::ffi as substruct_match_ffi;

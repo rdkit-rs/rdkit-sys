@@ -93,7 +93,8 @@ fn main() {
         let h_path = wrapper_root
             .join("include")
             .join(format!("{}.h", base_name));
-        let meta = std::fs::metadata(&h_path).unwrap();
+        let meta =
+            std::fs::metadata(&h_path).expect(&format!("could not get metadata for {h_path:?}"));
         if !meta.is_file() {
             panic!("{} must exist", h_path.display())
         }
@@ -131,6 +132,7 @@ fn main() {
         "RDGeneral",
         // "RDGeometryLib",
         // "RingDecomposerLib",
+        "ScaffoldNetwork",
         "SmilesParse",
         // "Subgraphs",
         "SubstructMatch",
