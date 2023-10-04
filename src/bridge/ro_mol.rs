@@ -29,6 +29,8 @@ pub mod ffi {
         pub fn detect_chemistry_problems(mol: SharedPtr<ROMol>) -> UniquePtr<CxxVector<CxxString>>;
         // pub fn mol_sanitize_exception_type() -> String;
 
+        pub fn get_num_atoms(mol: SharedPtr<ROMol>, onlyExplicit: bool) -> u32;
         pub fn get_atom_with_idx(mol: SharedPtr<ROMol>, idx: u32) -> SharedPtr<Atom>;
+        pub fn get_symbol(atom: SharedPtr<Atom>) -> String;
     }
 }

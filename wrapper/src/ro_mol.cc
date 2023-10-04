@@ -7,6 +7,8 @@
 #include <GraphMol/MolStandardize/Tautomer.h>
 #include <GraphMol/MolOps.h>
 
+#include <iostream>
+
 namespace RDKit {
     using ExplicitBitVect = ::ExplicitBitVect;
 
@@ -46,5 +48,25 @@ namespace RDKit {
         }
 
         return std::unique_ptr<std::vector<std::string>>(get_types);
+    }
+
+    unsigned int get_num_atoms(std::shared_ptr<ROMol> mol, bool only_explicit) {
+      for(auto atom : mol->atoms()) {
+         auto theIdx = atom->getIdx();
+         std::cout << "the idx: " << theIdx << std::endl;
+      };
+
+      return mol->getNumAtoms(only_explicit);
+    }
+
+    std::shared_ptr<Atom> get_atom_with_idx(std::shared_ptr<ROMol> mol, unsigned int idx) {
+      Atom *borrowed_atom = mol->getAtomWithIdx(idx);
+      Atom *atom = new Atom((*borrowed_atom));
+
+      return std::shared_ptr<Atom>(atom);
+    }
+
+    rust::String get_symbol(std::shared_ptr<Atom> atom) {
+      return atom->getSymbol();
     }
 }
