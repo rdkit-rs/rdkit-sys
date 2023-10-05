@@ -2,6 +2,7 @@
 #include <GraphMol/GraphMol.h>
 #include <RDGeneral/FileParseException.h>
 #include <GraphMol/FileParsers/FileParsers.h>
+#include <GraphMol/SmilesParse/SmilesParse.h>
 
 namespace RDKit {
     std::shared_ptr<RWMol> rw_mol_from_mol_block(const std::string &mol_block, bool sanitize, bool remove_hs, bool strict_parsing) {
@@ -24,5 +25,13 @@ namespace RDKit {
     std::shared_ptr<RWMol> rw_mol_from_rw_mol(std::shared_ptr<RWMol> mol) {
         RWMol *rw_mol = new RWMol(*mol);
         return std::shared_ptr<RWMol>(rw_mol);
+    }
+
+    std::shared_ptr<ROMol> rw_mol_to_ro_mol(std::shared_ptr<RWMol> mol) {
+        return std::static_pointer_cast<ROMol>(mol);
+    }
+
+    std::shared_ptr<RWMol> smarts_to_mol(const std::string &smarts) {
+        return std::shared_ptr<RWMol>(SmartsToMol(smarts));
     }
 }

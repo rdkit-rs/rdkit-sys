@@ -32,5 +32,7 @@ pub mod ffi {
         pub fn get_num_atoms(mol: SharedPtr<ROMol>, onlyExplicit: bool) -> u32;
         pub fn get_atom_with_idx(mol: SharedPtr<ROMol>, idx: u32) -> SharedPtr<Atom>;
         pub fn get_symbol(atom: SharedPtr<Atom>) -> String;
+
+        pub fn update_property_cache(mol: SharedPtr<ROMol>, strict: bool);
     }
 }

@@ -21,5 +21,9 @@ pub mod ffi {
         ) -> SharedPtr<RWMol>;
 
         pub fn rw_mol_from_rw_mol(mol: SharedPtr<RWMol>) -> SharedPtr<RWMol>;
+
+        pub fn rw_mol_to_ro_mol(mol: SharedPtr<RWMol>) -> SharedPtr<ROMol>;
+
+        pub fn smarts_to_mol(smarts: &CxxString) -> Result<SharedPtr<RWMol>>;
     }
 }

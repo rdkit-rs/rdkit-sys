@@ -69,4 +69,8 @@ namespace RDKit {
     rust::String get_symbol(std::shared_ptr<Atom> atom) {
       return atom->getSymbol();
     }
+
+    void update_property_cache(std::shared_ptr<ROMol> mol, bool strict) {
+      mol->updatePropertyCache(strict);
+    }
 }

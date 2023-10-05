@@ -25,4 +25,6 @@ namespace RDKit {
 
 //    pub fn get_symbol(atom: SharedPtr<Atom>) -> CxxString;
     rust::String get_symbol(std::shared_ptr<Atom> atom);
+
+    void update_property_cache(std::shared_ptr<ROMol> mol, bool strict);
 }
