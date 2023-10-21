@@ -14,27 +14,27 @@ pub mod ffi {
         ) -> SharedPtr<ScaffoldNetworkParams>;
 
         pub fn set_include_generic_scaffolds(
-            params: &SharedPtr<ScaffoldNetworkParams>,
+            params: &mut SharedPtr<ScaffoldNetworkParams>,
             input: bool,
         );
-        pub fn include_genericbond_scaffolds(
-            params: &SharedPtr<ScaffoldNetworkParams>,
+        pub fn include_generic_bond_scaffolds(
+            params: &mut SharedPtr<ScaffoldNetworkParams>,
             input: bool,
         );
         pub fn include_scaffolds_without_attachments(
-            params: &SharedPtr<ScaffoldNetworkParams>,
+            params: &mut SharedPtr<ScaffoldNetworkParams>,
             input: bool,
         );
         pub fn include_scaffolds_with_attachments(
-            params: &SharedPtr<ScaffoldNetworkParams>,
+            params: &mut SharedPtr<ScaffoldNetworkParams>,
             input: bool,
         );
-        pub fn keep_only_first_fragment(params: &SharedPtr<ScaffoldNetworkParams>, input: bool);
-        pub fn prune_before_fragmenting(params: &SharedPtr<ScaffoldNetworkParams>, input: bool);
-        pub fn flatten_isotopes(params: &SharedPtr<ScaffoldNetworkParams>, input: bool);
-        pub fn flatten_chirality(params: &SharedPtr<ScaffoldNetworkParams>, input: bool);
-        pub fn flatten_keep_largest(params: &SharedPtr<ScaffoldNetworkParams>, input: bool);
-        pub fn collect_mol_counts(params: &SharedPtr<ScaffoldNetworkParams>, input: bool);
+        pub fn keep_only_first_fragment(params: &mut SharedPtr<ScaffoldNetworkParams>, input: bool);
+        pub fn prune_before_fragmenting(params: &mut SharedPtr<ScaffoldNetworkParams>, input: bool);
+        pub fn flatten_isotopes(params: &mut SharedPtr<ScaffoldNetworkParams>, input: bool);
+        pub fn flatten_chirality(params: &mut SharedPtr<ScaffoldNetworkParams>, input: bool);
+        pub fn flatten_keep_largest(params: &mut SharedPtr<ScaffoldNetworkParams>, input: bool);
+        pub fn collect_mol_counts(params: &mut SharedPtr<ScaffoldNetworkParams>, input: bool);
 
         pub type ScaffoldNetworkClass;
         pub fn default_scaffold_network() -> SharedPtr<ScaffoldNetworkClass>;
