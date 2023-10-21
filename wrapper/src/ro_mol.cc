@@ -80,7 +80,32 @@ namespace RDKit {
       return atom->getSymbol();
     }
 
-    void update_property_cache(std::shared_ptr<ROMol> mol, bool strict) {
+    bool get_is_aromatic(const std::shared_ptr<Atom> &atom) {
+      return atom->getIsAromatic();
+    }
+    int get_atomic_num(const std::shared_ptr<Atom> &atom) {
+      return atom->getAtomicNum();
+    }
+    int get_formal_charge(const std::shared_ptr<Atom> &atom) {
+      return atom->getFormalCharge();
+    }
+    unsigned int get_total_num_hs(const std::shared_ptr<Atom> &atom) {
+      return atom->getTotalNumHs();
+    }
+    unsigned int get_total_valence(const std::shared_ptr<Atom> &atom) {
+      return atom->getTotalValence();
+    }
+    void set_formal_charge(std::shared_ptr<Atom> &atom, int what) {
+      atom->setFormalCharge(what);
+    }
+    void set_num_explicit_hs(std::shared_ptr<Atom> &atom, int what) {
+      atom->setNumExplicitHs(what);
+    }
+    void atom_update_property_cache(std::shared_ptr<Atom> &atom, bool strict) {
+      atom->updatePropertyCache(strict);
+    }
+
+    void ro_mol_update_property_cache(std::shared_ptr<ROMol> &mol, bool strict) {
       mol->updatePropertyCache(strict);
     }
 }

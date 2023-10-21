@@ -25,6 +25,14 @@ namespace RDKit {
     unsigned int get_num_atoms(const std::shared_ptr<ROMol> &mol, bool only_explicit);
     std::shared_ptr<Atom> get_atom_with_idx(const std::shared_ptr<ROMol> &mol, unsigned int idx);
     rust::String get_symbol(const std::shared_ptr<Atom> &atom);
+    bool get_is_aromatic(const std::shared_ptr<Atom> &atom);
+    int get_atomic_num(const std::shared_ptr<Atom> &atom);
+    int get_formal_charge(const std::shared_ptr<Atom> &atom);
+    unsigned int get_total_num_hs(const std::shared_ptr<Atom> &atom);
+    unsigned int get_total_valence(const std::shared_ptr<Atom> &atom);
+    void set_formal_charge(std::shared_ptr<Atom> &atom, int what);
+    void set_num_explicit_hs(std::shared_ptr<Atom> &atom, int what);
+    void atom_update_property_cache(std::shared_ptr<Atom> &mol, bool strict);
 
-    void update_property_cache(std::shared_ptr<ROMol> mol, bool strict);
+    void ro_mol_update_property_cache(std::shared_ptr<ROMol> &mol, bool strict);
 }

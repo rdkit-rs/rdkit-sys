@@ -1,10 +1,10 @@
 #[test]
 fn test_ro_mol() {
     cxx::let_cxx_string!(smile = "c1ccccc1CCCCCCCC");
-    let romol = rdkit_sys::ro_mol_ffi::smiles_to_mol(&smile).unwrap();
+    let mut romol = rdkit_sys::ro_mol_ffi::smiles_to_mol(&smile).unwrap();
     assert!(!romol.is_null());
 
-    rdkit_sys::ro_mol_ffi::update_property_cache(romol, true);
+    rdkit_sys::ro_mol_ffi::ro_mol_update_property_cache(&mut romol, true);
 }
 
 #[test]
@@ -59,5 +59,5 @@ fn parse_without_sanitize_test() {
         .map(|idx| rdkit_sys::ro_mol_ffi::get_atom_with_idx(&romol, idx))
         .map(|a| rdkit_sys::ro_mol_ffi::get_symbol(&a))
         .collect::<Vec<_>>();
-    assert_eq!(atoms, &["N", "N"])
+    assert_eq!(atoms, &["N", "N"]);
 }

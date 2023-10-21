@@ -42,8 +42,16 @@ pub mod ffi {
         pub fn get_num_atoms(mol: &SharedPtr<ROMol>, onlyExplicit: bool) -> u32;
         pub fn get_atom_with_idx(mol: &SharedPtr<ROMol>, idx: u32) -> SharedPtr<Atom>;
         pub fn get_symbol(atom: &SharedPtr<Atom>) -> String;
+        pub fn get_is_aromatic(atom: &SharedPtr<Atom>) -> bool;
+        pub fn get_atomic_num(atom: &SharedPtr<Atom>) -> i32;
+        pub fn get_formal_charge(atom: &SharedPtr<Atom>) -> i32;
+        pub fn get_total_num_hs(atom: &SharedPtr<Atom>) -> u32;
+        pub fn get_total_valence(atom: &SharedPtr<Atom>) -> u32;
+        pub fn set_formal_charge(atom: &mut SharedPtr<Atom>, what: i32);
+        pub fn set_num_explicit_hs(atom: &mut SharedPtr<Atom>, what: i32);
+        pub fn atom_update_property_cache(atom: &mut SharedPtr<Atom>, strict: bool);
 
-        pub fn update_property_cache(mol: SharedPtr<ROMol>, strict: bool);
+        pub fn ro_mol_update_property_cache(atom: &mut SharedPtr<ROMol>, strict: bool);
 
         // RDKIT_SUBSTRUCTMATCH_EXPORT std::vector<MatchVectType> RDKit::SubstructMatch
         // ( 	const ROMol &  	mol, const ROMol &  	query,
