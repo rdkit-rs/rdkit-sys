@@ -40,12 +40,26 @@ fn parse_without_sanitize_test() {
 
     let romol = romol.unwrap();
     let problems = rdkit_sys::ro_mol_ffi::detect_chemistry_problems(romol);
-    assert_eq!(
-        problems.get(0).unwrap().to_str().unwrap(),
-        "AtomValenceException"
-    );
-    assert_eq!(
-        problems.get(1).unwrap().to_str().unwrap(),
-        "AtomValenceException"
-    );
+    assert_eq!(problems.len(), 2);
+
+    let types = problems
+        .iter()
+        .map(|p| rdkit_sys::ro_mol_ffi::mol_sanitize_exception_type(p))
+        .collect::<Vec<_>>();
+    assert_eq!(&types, &["AtomValenceException", "AtomValenceException"]);
+
+    let atom_idxs = problems
+        .iter()
+        .map(|p| rdkit_sys::ro_mol_ffi::atom_sanitize_exception_get_atom_idx(p))
+        .collect::<Vec<_>>();
+    assert_eq!(&atom_idxs, &[1, 11]);
+
+    // assert_eq!(
+    //     problems.get(0).unwrap().to_str().unwrap(),
+    //     "AtomValenceException"
+    // );
+    // assert_eq!(
+    //     problems.get(1).unwrap().to_str().unwrap(),
+    //     "AtomValenceException"
+    // );
 }

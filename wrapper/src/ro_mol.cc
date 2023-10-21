@@ -38,16 +38,29 @@ namespace RDKit {
         return MolToSmiles(*mol);
     }
 
-    std::unique_ptr<std::vector<std::string>> detect_chemistry_problems(std::shared_ptr<ROMol> mol) {
-        std::vector<std::unique_ptr<RDKit::MolSanitizeException>> exceptions = RDKit::MolOps::detectChemistryProblems(*mol);
-        std::vector<std::string> *get_types = new std::vector<std::string>;
-        get_types->reserve(exceptions.size());
+    using MolSanitizeExceptionUniquePtr = std::unique_ptr<MolSanitizeException>;
+    std::unique_ptr<std::vector<MolSanitizeExceptionUniquePtr>> detect_chemistry_problems(std::shared_ptr<ROMol> mol) {
+        std::vector<MolSanitizeExceptionUniquePtr> exceptions = RDKit::MolOps::detectChemistryProblems(*mol);
+        std::vector<MolSanitizeExceptionUniquePtr> *heaped_exceptions = new std::vector<MolSanitizeExceptionUniquePtr>();
 
-        for (auto &t: exceptions) {
-            get_types->push_back(t->getType());
+        auto s = exceptions.size();
+        heaped_exceptions->reserve(s);
+        for (int i=0; i<s; i++) {
+          heaped_exceptions->push_back(std::move(exceptions[i]));
         }
 
-        return std::unique_ptr<std::vector<std::string>>(get_types);
+        return std::unique_ptr<std::vector<MolSanitizeExceptionUniquePtr>>(heaped_exceptions);
+    }
+
+    rust::String mol_sanitize_exception_type(const MolSanitizeExceptionUniquePtr &mol_except) {
+      return mol_except->getType();
+    }
+
+    unsigned int atom_sanitize_exception_get_atom_idx(const MolSanitizeExceptionUniquePtr &mol_except) {
+      MolSanitizeException *mol_except_ptr = mol_except.get();
+      AtomSanitizeException *atom_sanitize_except_ptr = (AtomSanitizeException *) mol_except_ptr;
+
+      return atom_sanitize_except_ptr->getAtomIdx();
     }
 
     unsigned int get_num_atoms(std::shared_ptr<ROMol> mol, bool only_explicit) {

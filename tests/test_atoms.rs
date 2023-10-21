@@ -1,5 +1,3 @@
-use std::mem::forget;
-
 #[test]
 fn test_atoms() {
     cxx::let_cxx_string!(smile = "c1ccccc1CCCCCCCC");
@@ -9,6 +7,6 @@ fn test_atoms() {
 
     for idx in 0..num_atoms {
         println!("grabbing idx {}", idx);
-        let atom = rdkit_sys::ro_mol_ffi::get_atom_with_idx(romol.clone(), idx);
+        let _atom = rdkit_sys::ro_mol_ffi::get_atom_with_idx(romol.clone(), idx);
     }
 }
