@@ -22,7 +22,7 @@ namespace RDKit {
         return std::shared_ptr<ROMol>(mol);
     }
 
-    std::shared_ptr<ROMol> smiles_to_mol_with_params(const std::string &smiles, std::shared_ptr<SmilesParserParams> params) {
+    std::shared_ptr<ROMol> smiles_to_mol_with_params(const std::string &smiles, const std::shared_ptr<SmilesParserParams> &params) {
         ROMol *mol = SmilesToMol(smiles, *params);
 
         return std::shared_ptr<ROMol>(mol);
@@ -30,7 +30,7 @@ namespace RDKit {
     std::shared_ptr<SmilesParserParams> new_smiles_parser_params() {
         return std::shared_ptr<SmilesParserParams>(new SmilesParserParams());
     }
-    void smiles_parser_params_set_sanitize(std::shared_ptr<SmilesParserParams> params, bool sanitize) {
+    void smiles_parser_params_set_sanitize(const std::shared_ptr<SmilesParserParams> &params, bool sanitize) {
         params->sanitize = sanitize;
     }
 
@@ -39,7 +39,7 @@ namespace RDKit {
     }
 
     using MolSanitizeExceptionUniquePtr = std::unique_ptr<MolSanitizeException>;
-    std::unique_ptr<std::vector<MolSanitizeExceptionUniquePtr>> detect_chemistry_problems(std::shared_ptr<ROMol> mol) {
+    std::unique_ptr<std::vector<MolSanitizeExceptionUniquePtr>> detect_chemistry_problems(const std::shared_ptr<ROMol> &mol) {
         std::vector<MolSanitizeExceptionUniquePtr> exceptions = RDKit::MolOps::detectChemistryProblems(*mol);
         std::vector<MolSanitizeExceptionUniquePtr> *heaped_exceptions = new std::vector<MolSanitizeExceptionUniquePtr>();
 
@@ -72,14 +72,14 @@ namespace RDKit {
       return mol->getNumAtoms(only_explicit);
     }
 
-    std::shared_ptr<Atom> get_atom_with_idx(std::shared_ptr<ROMol> mol, unsigned int idx) {
+    std::shared_ptr<Atom> get_atom_with_idx(const std::shared_ptr<ROMol> &mol, unsigned int idx) {
       Atom *borrowed_atom = mol->getAtomWithIdx(idx);
       Atom *atom = new Atom((*borrowed_atom));
 
       return std::shared_ptr<Atom>(atom);
     }
 
-    rust::String get_symbol(std::shared_ptr<Atom> atom) {
+    rust::String get_symbol(const std::shared_ptr<Atom> &atom) {
       return atom->getSymbol();
     }
 

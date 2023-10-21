@@ -27,19 +27,19 @@ fn parse_without_sanitize_test() {
     cxx::let_cxx_string!(smile = "N#[N]c1ccc(cc1)N(C)CN(C)(C)(C)");
 
     let params = rdkit_sys::ro_mol_ffi::new_smiles_parser_params();
-    rdkit_sys::ro_mol_ffi::smiles_parser_params_set_sanitize(params.clone(), true);
-    let romol = rdkit_sys::ro_mol_ffi::smiles_to_mol_with_params(&smile, params);
+
+    rdkit_sys::ro_mol_ffi::smiles_parser_params_set_sanitize(&params, true);
+    let romol = rdkit_sys::ro_mol_ffi::smiles_to_mol_with_params(&smile, &params);
 
     assert!(romol.is_err());
 
-    let params = rdkit_sys::ro_mol_ffi::new_smiles_parser_params();
-    rdkit_sys::ro_mol_ffi::smiles_parser_params_set_sanitize(params.clone(), false);
-    let romol = rdkit_sys::ro_mol_ffi::smiles_to_mol_with_params(&smile, params);
+    rdkit_sys::ro_mol_ffi::smiles_parser_params_set_sanitize(&params, false);
+    let romol = rdkit_sys::ro_mol_ffi::smiles_to_mol_with_params(&smile, &params);
 
     assert!(romol.is_ok());
 
     let romol = romol.unwrap();
-    let problems = rdkit_sys::ro_mol_ffi::detect_chemistry_problems(romol);
+    let problems = rdkit_sys::ro_mol_ffi::detect_chemistry_problems(&romol);
     assert_eq!(problems.len(), 2);
 
     let types = problems
@@ -54,12 +54,10 @@ fn parse_without_sanitize_test() {
         .collect::<Vec<_>>();
     assert_eq!(&atom_idxs, &[1, 11]);
 
-    // assert_eq!(
-    //     problems.get(0).unwrap().to_str().unwrap(),
-    //     "AtomValenceException"
-    // );
-    // assert_eq!(
-    //     problems.get(1).unwrap().to_str().unwrap(),
-    //     "AtomValenceException"
-    // );
+    let atoms = atom_idxs
+        .into_iter()
+        .map(|idx| rdkit_sys::ro_mol_ffi::get_atom_with_idx(&romol, idx))
+        .map(|a| rdkit_sys::ro_mol_ffi::get_symbol(&a))
+        .collect::<Vec<_>>();
+    assert_eq!(atoms, &["N", "N"])
 }

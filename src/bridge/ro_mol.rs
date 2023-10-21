@@ -17,18 +17,18 @@ pub mod ffi {
 
         pub fn smiles_to_mol_with_params(
             smi: &CxxString,
-            params: SharedPtr<SmilesParserParams>,
+            params: &SharedPtr<SmilesParserParams>,
         ) -> Result<SharedPtr<ROMol>>;
         pub fn new_smiles_parser_params() -> SharedPtr<SmilesParserParams>;
         pub fn smiles_parser_params_set_sanitize(
-            ptr: SharedPtr<SmilesParserParams>,
+            ptr: &SharedPtr<SmilesParserParams>,
             sanitize: bool,
         );
 
         pub fn mol_to_smiles(mol: SharedPtr<ROMol>) -> String;
 
         pub fn detect_chemistry_problems(
-            mol: SharedPtr<ROMol>,
+            mol: &SharedPtr<ROMol>,
         ) -> UniquePtr<CxxVector<MolSanitizeExceptionUniquePtr>>;
 
         pub fn mol_sanitize_exception_type(
@@ -40,8 +40,8 @@ pub mod ffi {
         ) -> u32;
 
         pub fn get_num_atoms(mol: SharedPtr<ROMol>, onlyExplicit: bool) -> u32;
-        pub fn get_atom_with_idx(mol: SharedPtr<ROMol>, idx: u32) -> SharedPtr<Atom>;
-        pub fn get_symbol(atom: SharedPtr<Atom>) -> String;
+        pub fn get_atom_with_idx(mol: &SharedPtr<ROMol>, idx: u32) -> SharedPtr<Atom>;
+        pub fn get_symbol(atom: &SharedPtr<Atom>) -> String;
 
         pub fn update_property_cache(mol: SharedPtr<ROMol>, strict: bool);
 
