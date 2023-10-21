@@ -15,12 +15,12 @@ pub mod ffi {
         ) -> SharedPtr<RWMol>;
 
         pub fn rw_mol_from_ro_mol(
-            mol: SharedPtr<ROMol>,
+            mol: &SharedPtr<ROMol>,
             quick_copy: bool,
             conf_id: i32,
         ) -> SharedPtr<RWMol>;
 
-        pub fn rw_mol_from_rw_mol(mol: SharedPtr<RWMol>) -> SharedPtr<RWMol>;
+        pub fn rw_mol_from_rw_mol(mol: &SharedPtr<RWMol>) -> SharedPtr<RWMol>;
 
         pub fn rw_mol_to_ro_mol(mol: SharedPtr<RWMol>) -> SharedPtr<ROMol>;
 

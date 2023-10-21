@@ -7,12 +7,12 @@ fn test_descriptors() {
 
     let properties = rdkit_sys::descriptors_ffi::new_properties();
 
-    let names = rdkit_sys::descriptors_ffi::get_property_names(properties.clone());
+    let names = rdkit_sys::descriptors_ffi::get_property_names(&properties);
     let names = names
         .into_iter()
         .map(|stringy| stringy.to_string())
         .collect::<Vec<_>>();
-    let computed = rdkit_sys::descriptors_ffi::compute_properties(properties, mol);
+    let computed = rdkit_sys::descriptors_ffi::compute_properties(&properties, &mol);
     let computed = computed
         .into_iter()
         .map(|floaty| *floaty)

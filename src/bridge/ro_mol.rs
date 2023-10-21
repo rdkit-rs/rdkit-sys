@@ -11,7 +11,7 @@ pub mod ffi {
         pub type MolSanitizeException;
         pub type MolSanitizeExceptionUniquePtr; //  = UniquePtr<MolSanitizeException>;
 
-        pub fn copy_mol(mol: SharedPtr<ROMol>) -> SharedPtr<ROMol>;
+        pub fn copy_mol(mol: &SharedPtr<ROMol>) -> SharedPtr<ROMol>;
 
         pub fn smiles_to_mol(smi: &CxxString) -> Result<SharedPtr<ROMol>>;
 
@@ -25,7 +25,7 @@ pub mod ffi {
             sanitize: bool,
         );
 
-        pub fn mol_to_smiles(mol: SharedPtr<ROMol>) -> String;
+        pub fn mol_to_smiles(mol: &SharedPtr<ROMol>) -> String;
 
         pub fn detect_chemistry_problems(
             mol: &SharedPtr<ROMol>,
@@ -39,7 +39,7 @@ pub mod ffi {
             mol_sanitize_exception: &MolSanitizeExceptionUniquePtr,
         ) -> u32;
 
-        pub fn get_num_atoms(mol: SharedPtr<ROMol>, onlyExplicit: bool) -> u32;
+        pub fn get_num_atoms(mol: &SharedPtr<ROMol>, onlyExplicit: bool) -> u32;
         pub fn get_atom_with_idx(mol: &SharedPtr<ROMol>, idx: u32) -> SharedPtr<Atom>;
         pub fn get_symbol(atom: &SharedPtr<Atom>) -> String;
 

@@ -6,14 +6,14 @@ pub mod ffi {
 
         pub type ROMol = crate::ro_mol_ffi::ROMol;
         pub type ExplicitBitVect;
-        pub fn fingerprint_mol(mol: SharedPtr<ROMol>) -> SharedPtr<ExplicitBitVect>;
+        pub fn fingerprint_mol(mol: &SharedPtr<ROMol>) -> SharedPtr<ExplicitBitVect>;
 
         pub fn copy_explicit_bit_vect(
-            fingerprint: SharedPtr<ExplicitBitVect>,
+            fingerprint: &SharedPtr<ExplicitBitVect>,
         ) -> SharedPtr<ExplicitBitVect>;
 
         pub fn explicit_bit_vect_to_u64_vec(
-            bitvect: SharedPtr<ExplicitBitVect>,
+            bitvect: &SharedPtr<ExplicitBitVect>,
         ) -> UniquePtr<CxxVector<u64>>;
     }
 }

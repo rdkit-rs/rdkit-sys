@@ -12,7 +12,7 @@
 namespace RDKit {
     using ExplicitBitVect = ::ExplicitBitVect;
 
-    std::shared_ptr<ROMol> copy_mol(std::shared_ptr<ROMol> mol) {
+    std::shared_ptr<ROMol> copy_mol(const std::shared_ptr<ROMol> &mol) {
         return std::shared_ptr<ROMol>(new ROMol(*mol));
     }
 
@@ -20,6 +20,10 @@ namespace RDKit {
         ROMol *mol = SmilesToMol(smiles);
 
         return std::shared_ptr<ROMol>(mol);
+    }
+
+    rust::String mol_to_smiles(const std::shared_ptr<ROMol> &mol) {
+        return MolToSmiles(*mol);
     }
 
     std::shared_ptr<ROMol> smiles_to_mol_with_params(const std::string &smiles, const std::shared_ptr<SmilesParserParams> &params) {
@@ -34,9 +38,7 @@ namespace RDKit {
         params->sanitize = sanitize;
     }
 
-    rust::String mol_to_smiles(std::shared_ptr<ROMol> mol) {
-        return MolToSmiles(*mol);
-    }
+
 
     using MolSanitizeExceptionUniquePtr = std::unique_ptr<MolSanitizeException>;
     std::unique_ptr<std::vector<MolSanitizeExceptionUniquePtr>> detect_chemistry_problems(const std::shared_ptr<ROMol> &mol) {
@@ -63,12 +65,7 @@ namespace RDKit {
       return atom_sanitize_except_ptr->getAtomIdx();
     }
 
-    unsigned int get_num_atoms(std::shared_ptr<ROMol> mol, bool only_explicit) {
-      for(auto atom : mol->atoms()) {
-         auto theIdx = atom->getIdx();
-         std::cout << "the idx: " << theIdx << std::endl;
-      };
-
+    unsigned int get_num_atoms(const std::shared_ptr<ROMol> &mol, bool only_explicit) {
       return mol->getNumAtoms(only_explicit);
     }
 
