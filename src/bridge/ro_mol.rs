@@ -53,29 +53,7 @@ pub mod ffi {
 
         pub fn ro_mol_update_property_cache(atom: &mut SharedPtr<ROMol>, strict: bool);
 
-        // RDKIT_SUBSTRUCTMATCH_EXPORT std::vector<MatchVectType> RDKit::SubstructMatch
-        // ( 	const ROMol &  	mol, const ROMol &  	query,
-        // const SubstructMatchParameters &  	params = SubstructMatchParameters()
-        // )
-
         // PeriodicTable
         // const INT_VECT & 	getValenceList (UINT atomicNumber) const
-
-        // detect_chemistry_problems needs more info on the MolSanitizeException
-        // export the type to include type() and getAtomIdx()
-
-        // Hydrogen stuff
-        // export C++ struct RDKit::MolOps::RemoveHsParameters, make the members visible
-        // RDKIT_GRAPHMOL_EXPORT ROMol* RDKit::MolOps::removeHs 	( 	const ROMol &  	mol,
-        // 		const RemoveHsParameters &  	ps,
-        // 		bool  	sanitize = true
-        // 	)
-
-        // RDKIT_GRAPHMOL_EXPORT ROMol* RDKit::MolOps::addHs 	( 	const ROMol &  	mol,
-        // bool  	explicitOnly = false,
-        // bool  	addCoords = false,
-        // const UINT_VECT *  	onlyOnAtoms = nullptr,
-        // bool  	addResidueInfo = false
-        // )
     }
 }
