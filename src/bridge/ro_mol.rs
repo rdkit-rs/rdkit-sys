@@ -52,8 +52,5 @@ pub mod ffi {
         pub fn atom_update_property_cache(atom: &mut SharedPtr<Atom>, strict: bool);
 
         pub fn ro_mol_update_property_cache(atom: &mut SharedPtr<ROMol>, strict: bool);
-
-        // PeriodicTable
-        // const INT_VECT & 	getValenceList (UINT atomicNumber) const
     }
 }
