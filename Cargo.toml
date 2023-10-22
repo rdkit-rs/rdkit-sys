@@ -11,12 +11,12 @@ exclude = ["rdkit-*", "*.tar.gz", "examples/"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-cxx = "1.0.95"
+cxx = "1.0.109"
 
 [build-dependencies]
 env_logger = "0.10.0"
-cxx-build = "1.0.95"
-which = "4.4.0"
+cxx-build = "1.0.109"
+which = "4.4.2"
 
 [features]
 default = []
