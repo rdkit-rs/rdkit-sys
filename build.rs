@@ -88,15 +88,18 @@ fn main() {
         if !meta.is_file() {
             panic!("{} must exist", cc_path.display())
         }
+        println!("cargo:rerun-if-changed={}", cc_path.to_str().unwrap());
         wrapper_cc_paths.push(cc_path);
 
         let h_path = wrapper_root
             .join("include")
             .join(format!("{}.h", base_name));
-        let meta = std::fs::metadata(&h_path).unwrap();
+        let meta =
+            std::fs::metadata(&h_path).expect(&format!("could not get metadata for {h_path:?}"));
         if !meta.is_file() {
             panic!("{} must exist", h_path.display())
         }
+        println!("cargo:rerun-if-changed={}", h_path.to_str().unwrap());
     }
 
     cxx_build::bridges(rust_files)
@@ -131,6 +134,7 @@ fn main() {
         "RDGeneral",
         // "RDGeometryLib",
         // "RingDecomposerLib",
+        "ScaffoldNetwork",
         "SmilesParse",
         // "Subgraphs",
         "SubstructMatch",

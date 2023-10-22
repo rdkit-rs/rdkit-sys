@@ -42,7 +42,7 @@ TODO
 
  - [ ] figure out how to `cargo publish` without `--no-verify` (otherwise it detects changes outside of OUTDIR)
  - [X] specify path to RDKit's cffiwrapper.h and all required search paths for other dependent headers
- - [ ] use conditional rebuild logic to make the library build experience more reliable (for now, if you get stuck, try `cargo clean` and retry with `cargo build -vv`)
+ - [X] use conditional rebuild logic to make the library build experience more reliable (for now, if you get stuck, try `cargo clean` and retry with `cargo build -vv`)
 
 Related Documentation
 ---

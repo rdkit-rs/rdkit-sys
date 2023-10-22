@@ -1,3 +1,10 @@
+0.4.0
+---
+
+ * Update all relevant APIs to perform borrows, require much less clone() of `std::shared_ptr` objects
+ * Scaffold API
+ * MolOps API
+
 0.3.0
 ---
 

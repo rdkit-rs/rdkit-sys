@@ -2,6 +2,16 @@ use cxx::{let_cxx_string, SharedPtr};
 use rdkit_sys::{ro_mol_ffi::ROMol, rw_mol_ffi::RWMol};
 
 #[test]
+fn test_rw_mol_from_smarts() {
+    cxx::let_cxx_string!(smarts = "[+1!h0!$([*]~[-1,-2,-3,-4]),-1!$([*]~[+1,+2,+3,+4])]");
+    let rwmol = rdkit_sys::rw_mol_ffi::smarts_to_mol(&smarts).unwrap();
+    let romol = rdkit_sys::rw_mol_ffi::rw_mol_to_ro_mol(rwmol);
+
+    let smile = rdkit_sys::ro_mol_ffi::mol_to_smiles(&romol);
+    assert_eq!(smile, "*".to_string());
+}
+
+#[test]
 fn test_rw_mol_from_mol_block() {
     let mol_block = r#"1
   -OEChem-05172223082D
@@ -180,7 +190,7 @@ CC(=O)OC(CC(=O)[O-])C[N+](C)(C)C
     let rw_mol = rdkit_sys::rw_mol_ffi::rw_mol_from_mol_block(&mol_block, false, false, false);
     let ro_mol = unsafe { std::mem::transmute::<SharedPtr<RWMol>, SharedPtr<ROMol>>(rw_mol) };
 
-    let smiles = rdkit_sys::ro_mol_ffi::mol_to_smiles(ro_mol);
+    let smiles = rdkit_sys::ro_mol_ffi::mol_to_smiles(&ro_mol);
     assert_eq!("[H]C([H])([H])C(=O)OC([H])(C([H])([H])C(=O)[O-])C([H])([H])[N+](C([H])([H])[H])(C([H])([H])[H])C([H])([H])[H]", &smiles);
 }
 

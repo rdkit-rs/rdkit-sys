@@ -10,7 +10,7 @@ fn test_substruct_match_as_bool() {
 
     let match_params = new_substruct_match_parameters();
 
-    let hits = substruct_match_as_bool(mol, query, match_params);
+    let hits = substruct_match_as_bool(&mol, &query, &match_params);
 
     assert_eq!(hits, true);
 }

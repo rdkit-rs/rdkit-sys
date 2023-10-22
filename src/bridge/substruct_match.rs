@@ -9,15 +9,15 @@ pub mod ffi {
         pub type MatchVectType;
 
         pub fn substruct_match(
-            mol: SharedPtr<ROMol>,
-            mol_query: SharedPtr<ROMol>,
-            params: SharedPtr<SubstructMatchParameters>,
+            mol: &SharedPtr<ROMol>,
+            mol_query: &SharedPtr<ROMol>,
+            params: &SharedPtr<SubstructMatchParameters>,
         ) -> UniquePtr<CxxVector<MatchVectType>>;
 
         pub fn substruct_match_as_bool(
-            mol: SharedPtr<ROMol>,
-            mol_query: SharedPtr<ROMol>,
-            params: SharedPtr<SubstructMatchParameters>,
+            mol: &SharedPtr<ROMol>,
+            mol_query: &SharedPtr<ROMol>,
+            params: &SharedPtr<SubstructMatchParameters>,
         ) -> bool;
 
         pub fn new_substruct_match_parameters() -> SharedPtr<SubstructMatchParameters>;
