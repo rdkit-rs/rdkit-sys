@@ -61,17 +61,6 @@ pub mod ffi {
         // PeriodicTable
         // const INT_VECT & 	getValenceList (UINT atomicNumber) const
 
-        // Atom methods
-        // GetIsAromatic --> isAromaticAtom
-        // GetAtomicNum --> getAtomicNum
-        // GetFormalCharge --> getFormalCharge
-        // GetSymbol --> getSymbol
-        // GetTotalNumHs --> getTotalNumHs
-        // GetTotalValence --> getTotalValence
-        // SetFormalCharge --> setFormalCharge
-        // SetNumExplicitHs --> setNumExplicitHs
-        // UpdatePropertyCache --> updatePropertyCache
-
         // detect_chemistry_problems needs more info on the MolSanitizeException
         // export the type to include type() and getAtomIdx()
 
